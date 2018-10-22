@@ -63,7 +63,7 @@ class App extends Component {
               style={{
                 position: 'relative',
                 top: this.state.playerPos[1],
-                left: this.state.playerPos[0]
+                left: this.state.playerPos[0],
               }}
             />
         </div>
