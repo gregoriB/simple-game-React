@@ -9,57 +9,65 @@ class App extends Component {
   playerSize = 20;
   mapHeight = this.playerSize * 20;
   mapWidth = this.playerSize * 40;
-
+  
   handlePlayerMove = (index, value) => {
     const newPlayerPos = [...this.state.playerPos];
-    const axis = index === 0 ? 0 : 1;
     const boundary = index === 0 ? this.mapWidth : this.mapHeight;
-    console.log(axis)
     newPlayerPos.splice(index, 1, newPlayerPos[index] + value)
-    if (newPlayerPos[axis] < 0 || newPlayerPos[axis] >= (boundary)) {
+    if (newPlayerPos[index] < 0 || newPlayerPos[index] >= boundary) {
+      
       return;
     }
-    this.setState(() => ({ playerPos: newPlayerPos }))
+    this.setState(() => ({ playerPos: newPlayerPos }));
   }
 
   handleMove = (e) => {
     e.preventDefault();
-    switch(e.keyCode) {
-      case 37: //left
-        return this.handlePlayerMove(0, -20)
-      case 38: //up
-        return this.handlePlayerMove(1, -20)
-      case 39: //right
-        return this.handlePlayerMove(0, 20)
-      case 40: //down
-        return this.handlePlayerMove(1, 20)
+    switch(e.key) {
+      case 'ArrowLeft': // left
+      case 'a': // a
+        this.handlePlayerMove(0, -20);
+        break;
+      case 'ArrowUp': // up
+      case 'w': // w
+        this.handlePlayerMove(1, -20);
+        break;
+      case 'ArrowRight': // right
+      case 'd': // d
+        this.handlePlayerMove(0, 20);
+        break;
+      case 'ArrowDown': // down
+      case 's': // s
+        this.handlePlayerMove(1, 20);
+        break;
       default:
-        console.log(e.keyCode);
+        console.log(e.key);
     }
   }
-  
+
   componentDidMount() {
     document.addEventListener('keydown', (e) => this.handleMove(e));
-    console.log(this.initialPos)
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', (e) => this.handleMove(e));
+    document.removeEventListener('keypress', (e) => this.handleMove(e));
   }
 
   render() {
     return (
-      <div className='map'>
-          <div 
-            className='player'
-            style={{
-              position: 'relative',
-              top: this.state.playerPos[1],
-              left: this.state.playerPos[0]
-
-            }}
-          />
-      </div>
+      <>  
+        <h1>Use the arrow or WASD keys to move</h1>
+        <div className='map'>
+            <div 
+              className='player'
+              style={{
+                position: 'relative',
+                top: this.state.playerPos[1],
+                left: this.state.playerPos[0]
+              }}
+            />
+        </div>
+      </>
     );
   }
 }
