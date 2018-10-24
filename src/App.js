@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import './components/styles/styles.css';
 import Food from './components/Food';
 
 class App extends Component {
@@ -40,14 +40,9 @@ class App extends Component {
     width: this.player.size * 80
   }
 
-  gameOver = true;
   highScore = 0;
   isReady = true;
   timer = undefined;
-
-  handleRandomColor = () => {
-    return `rgb(${~~(Math.random()*255)}, ${~~(Math.random()*255)}, ${~~(Math.random()*255)}`;
-  }
 
   handleHighScore = () => {
     if (this.state.score < this.state.highScore) {
@@ -72,19 +67,18 @@ class App extends Component {
 
   handleGameOver = () => {
     clearInterval(this.timer)
-    this.gameOver = true;
+    this.isReady = false;
     this.setState(() => ({ timer: 'GAME OVER' }))
     this.handleHighScore();
   }
   
   handleNewGame = () => {
     clearInterval(this.timer);
-    this.gameOver = false;
     this.isReady = false;
     this.food.x = [];
     this.food.y = [];
     this.setState(() => ({ 
-      playerPos: [(this.map.width/2)-this.player.size, (this.map.height/2)], 
+      playerPos: [(this.map.width/2)-(this.player.size)-1, (this.map.height/2)], 
       score: 0, 
       stage: 1, 
       timer: 3
@@ -191,7 +185,7 @@ class App extends Component {
     if (e.key === 'r') {
         return this.handleNewGame();
     }
-    if (this.state.timer === 'GAME OVER' || !this.isReady) {
+    if (!this.isReady) {
       this.handleClearMovement();
       return;
     }
@@ -268,13 +262,14 @@ class App extends Component {
         >
           <div className='uiBar'>
             <p className='stageCounter'>Stage: <span>{this.state.stage}</span></p>
-            <button onClick={this.handleNewGame}>{this.gameOver ? 'START' : 'RESET'}</button>
+            <button onClick={this.handleNewGame}>{this.isReady ? 'RESET' : 'START'}</button>
             <p className='score'>Score: <span>{this.state.score}</span></p>
             <p className='highScore'>Hi-Score: <span>{this.state.highScore}</span></p>
           </div>
           <div 
             className='map'
             style={{
+              position: 'absolute',
               height: this.map.height,
               width: this.map.width
             }}
@@ -283,7 +278,8 @@ class App extends Component {
               className='player'
               style={{
                 padding: this.player.size,
-                position: 'relative',
+                background: 'black',
+                position: 'absolute',
                 top: this.state.playerPos[1],
                 left: this.state.playerPos[0],
               }}
@@ -295,22 +291,25 @@ class App extends Component {
               foodY={this.food.y}
               foodSize={this.food.size}
               />
-            <p 
-              className='backgroundTimer'
-              style={{
-                left: this.map.width/2
-              }}
+            <div className='timers'>
+              <p 
+                className='backgroundTimer'
+                style={{
+                  color: this.isReady ? 'white': '#e33',
+                  fontSize: this.isReady ? '2rem': '3.5rem',
+                }}
               >
-              {this.state.timer}
-              </p>
-            <p 
+                {this.state.timer}
+                </p>
+              <p 
               className='foregroundTimer'
-              style={{
-                left: this.map.width/2
-              }}
-              >
-              {this.state.timer}
-              </p>
+                style={{
+                  opacity: this.isReady ? '.5': '0',
+                }}
+                >
+                {this.state.timer}
+                </p>
+              </div>
           </div>
               <h1>Use the arrow or WASD keys to move</h1>
         </div>

@@ -25,7 +25,7 @@ button {
 button:active {
   transform: scale(.9);
   transition: .1s;
-  background: rgb(224, 26, 26)
+  background: rgb(224, 26, 26);
 }
 
 p {
@@ -48,14 +48,16 @@ span {
 .map {
   position: relative;
   background: rgb(19, 161, 78);
-  margin: 0 auto;
+  z-index: 1;
 }
 
 .player {
-  background: black;
+  display: inline-block;
+  position: relative;
   height: 0;
   width: 0;
   margin: 0;
+  z-index: 2;
 }
 
 .food {
@@ -99,16 +101,24 @@ span {
   justify-self: flex-end;
 }
 
-.backgroundTimer {
-  margin-top: 70px;
-  font-size: 2.2rem;
+.timers p {
+  color: white;
+  position: absolute;
+  position: relative;
+  text-align: center;
+  font-size: 2rem;
   font-weight: 700;
+}
+
+
+.backgroundTimer {
+  z-index: 1;
+  margin-top: 100px;
   text-shadow: 1px 1px 0px rgba(68, 68, 68, 0.459);
 }
 
 .foregroundTimer {
-  margin-top: -40px;
-  opacity: .5;
-  font-size: 2.2rem;
-  font-weight: 700;
-}
+  color: white;
+  z-index: 3;
+  margin-top: -37px;
+ }
