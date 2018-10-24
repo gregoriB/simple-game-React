@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import './components/styles/styles.css';
 import Food from './components/Food';
+import song from './audio/track1.mp3'
+import explosion from './audio/explosion.wav';
 
 class App extends Component {
   state = {
+    audio: true,
     highScore: 0,
     playerPos: [100, 240],
     score: undefined,
@@ -11,6 +14,9 @@ class App extends Component {
     timer: undefined,
   }
   
+  song = new Audio(song);
+  explosion = new Audio(explosion);
+
   canMove = {
     left: true,
     right: true,
@@ -44,6 +50,18 @@ class App extends Component {
   isReady = true;
   timer = undefined;
 
+  handleVolume = () => {
+    if (this.state.audio) {
+      this.song.volume = 0;
+      this.explosion.volume = 0;
+    } 
+    if (!this.state.audio) {
+      this.song.volume = .3;
+      this.explosion.volume = .07;
+    }
+    this.setState((prevState) => ({ audio: !prevState.audio }))
+  }
+
   handleHighScore = () => {
     if (this.state.score < this.state.highScore) {
       return;
@@ -67,6 +85,9 @@ class App extends Component {
 
   handleGameOver = () => {
     clearInterval(this.timer)
+    this.song.pause();
+    this.song.currentTime = 0;
+    this.explosion.play();
     this.isReady = false;
     this.setState(() => ({ timer: 'GAME OVER' }))
     this.handleHighScore();
@@ -85,6 +106,8 @@ class App extends Component {
     }));
     this.handleGenerateFood(1);
     this.handleCountdown();
+    this.song.play();
+    this.song.currentTime = 0;
     setTimeout(() => {
       this.handleStartTimer();
     }, 2998);
@@ -232,6 +255,8 @@ class App extends Component {
     document.addEventListener('keyup', (e) => this.handleKeyup(e));
     const highScore = JSON.parse(localStorage.getItem('highScore'));
     this.setState(() => ({ highScore: highScore, score: 0 }));
+    this.explosion.volume = .07;
+    this.song.volume = .3;
     if (!highScore) {
       this.setState(() => ({ highScore: 0 }))
     }                    
@@ -262,7 +287,18 @@ class App extends Component {
         >
           <div className='uiBar'>
             <p className='stageCounter'>Stage: <span>{this.state.stage}</span></p>
-            <button onClick={this.handleNewGame}>{this.isReady ? 'RESET' : 'START'}</button>
+            <button 
+              className='startButton' 
+              onClick={this.handleNewGame}
+            >
+              {this.state.stage > 0 ? 'RESET' : 'START'}
+            </button>
+            <button 
+              onClick={this.handleVolume}
+              className={this.state.audio ? 'notMuted' : 'muted'}
+            >
+              {this.state.audio ? 'mute' : 'unmute'}
+            </button>
             <p className='score'>Score: <span>{this.state.score}</span></p>
             <p className='highScore'>Hi-Score: <span>{this.state.highScore}</span></p>
           </div>
