@@ -125,7 +125,7 @@ class App extends Component {
     this.setState((prevState) => ({ stage: prevState.stage + 1 }));
     this.handleGenerateFood(this.state.stage*2);
     this.setState((prevState) => ({ 
-      timer: prevState.timer+Math.ceil(this.state.stage+2/(this.state.stage)) 
+      timer: prevState.timer+Math.ceil(this.state.stage+4/(this.state.stage)) 
     }));
   }
 
