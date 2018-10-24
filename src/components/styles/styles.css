@@ -137,6 +137,7 @@ span {
   }
 
 .startButton {
+  min-width: 5rem;
 }
 
 .startButton:active {
