@@ -91,6 +91,10 @@ class App extends Component {
     this.isReady = false;
     this.setState(() => ({ timer: 'GAME OVER' }))
     this.handleHighScore();
+    this.song.removeEventListener('ended', () => {
+      this.song.currentTime = 0;
+      this.song.play();
+    }, false);
   }
   
   handleNewGame = () => {
@@ -108,6 +112,10 @@ class App extends Component {
     this.handleCountdown();
     this.song.play();
     this.song.currentTime = 0;
+    this.song.addEventListener('ended', () => {
+      this.song.currentTime = 0;
+      this.song.play();
+    }, false);
     setTimeout(() => {
       this.handleStartTimer();
     }, 2998);
@@ -116,7 +124,9 @@ class App extends Component {
   handleNextStage = () => {
     this.setState((prevState) => ({ stage: prevState.stage + 1 }));
     this.handleGenerateFood(this.state.stage*2);
-    this.setState((prevState) => ({ timer: prevState.timer+this.state.stage+2 }))
+    this.setState((prevState) => ({ 
+      timer: prevState.timer+Math.ceil(this.state.stage+2/(this.state.stage)) 
+    }));
   }
 
   handlePickUpFood = () => {
@@ -257,6 +267,7 @@ class App extends Component {
     this.setState(() => ({ highScore: highScore, score: 0 }));
     this.explosion.volume = .07;
     this.song.volume = .3;
+    
     if (!highScore) {
       this.setState(() => ({ highScore: 0 }))
     }                    
