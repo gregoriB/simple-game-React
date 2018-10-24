@@ -1,16 +1,114 @@
 body {
+  letter-spacing: 2px;
+  background: black;
   text-align: center;
+  color: white;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+
+h1 {
+  margin: 5rem auto;
+  width: 100%
+}
+
+button {
+  letter-spacing: 2px;
+  border: none;
+  background: rgba(255, 32, 32, 0.76);
+  color: rgba(255, 255, 255, 0.774);
+  outline: none;
+  text-align: center;
+  font-weight: bold;
+  width: 4rem;
+}
+
+button:active {
+  transform: scale(.9);
+  transition: .1s;
+  background: rgb(224, 26, 26)
+}
+
+p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+span {
+  letter-spacing: 4px;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.app {
+  max-width: 45rem;
+  margin: 0 auto;
+  padding: 0;
 }
 
 .map {
-  background: rgb(50, 104, 29);
-  margin: 12% auto;
-  height: 400px;
-  width: 800px;
+  position: relative;
+  background: rgb(19, 161, 78);
+  margin: 0 auto;
 }
 
 .player {
   background: black;
-  height: 20px;
-  width: 20px;
+  height: 0;
+  width: 0;
+  margin: 0;
+}
+
+.food {
+  background: rgb(255, 32, 32);
+  display: inherit;
+  position: absolute; 
+  margin: 0;
+  width: 0;
+  height: 0;
+  border: 1px solid rgba(3, 3, 3, 0.7);
+  border-radius: 50%;
+}
+
+.uiBar {
+  margin: 10% auto;
+  margin-bottom: 0;
+  max-width: 100%;
+  display: flex;
+  padding: 1rem;
+  background: rgb(92, 92, 92);
+  justify-content: space-between;
+}
+
+.stageCounter {
+  text-align: left;
+  margin-left: 2rem;
+  width: 150px;
+  justify-self: left;
+}
+
+
+.score {
+  text-align: left;
+  width: 200px;
+  margin-left: auto;
+}
+
+.highScore {
+  text-align: left;
+  width: 200px;
+  justify-self: flex-end;
+}
+
+.backgroundTimer {
+  margin-top: 70px;
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-shadow: 1px 1px 0px rgba(68, 68, 68, 0.459);
+}
+
+.foregroundTimer {
+  margin-top: -40px;
+  opacity: .5;
+  font-size: 2.2rem;
+  font-weight: 700;
 }
