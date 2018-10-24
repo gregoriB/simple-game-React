@@ -8,6 +8,7 @@ export default class FoodPiece extends Component {
         <div 
           className='food'
           style={{
+            background: this.props.color,
             top: this.props.foodY,
             left: this.props.foodX,
             padding: this.props.foodSize,

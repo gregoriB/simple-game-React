@@ -1,5 +1,6 @@
-import React from 'react'
-import FoodPiece from './FoodPiece'
+import React from 'react';
+import FoodPiece from './FoodPiece';
+import uuid from 'uuid';
 
 const Food = (props) => {
   let food;
@@ -8,11 +9,11 @@ const Food = (props) => {
       return (
         <FoodPiece
           index={index}
-          key={Math.random()}
+          key={uuid()}
           foodX={item}
           foodY={props.foodY[index]}     
           foodSize={props.foodSize}
-
+          color={props.color[index]}
         />
       );
     });

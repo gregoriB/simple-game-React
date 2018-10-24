@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Food from './components/Food'
+import Food from './components/Food';
 
 class App extends Component {
   state = {
@@ -31,6 +31,7 @@ class App extends Component {
   food = {
     x: [],
     y: [],
+    color: [],
     size: ~~(this.player.size / 3),
   }
   
@@ -43,6 +44,10 @@ class App extends Component {
   highScore = 0;
   isReady = true;
   timer = undefined;
+
+  handleRandomColor = () => {
+    return `rgb(${~~(Math.random()*255)}, ${~~(Math.random()*255)}, ${~~(Math.random()*255)}`;
+  }
 
   handleHighScore = () => {
     if (this.state.score < this.state.highScore) {
@@ -57,7 +62,7 @@ class App extends Component {
   handleStartTimer = () => {
     this.isReady = true;
     clearInterval(this.timer);
-    this.setState(() => ({ timer: 20, score: 0 }))
+    this.setState(() => ({ timer: 10, score: 0 }))
     this.timer = setInterval(() => { this.setState((prevState) => ({ timer: prevState.timer-1 })) }, 1000)
   }
 
@@ -94,7 +99,7 @@ class App extends Component {
   handleNextStage = () => {
     this.setState((prevState) => ({ stage: prevState.stage + 1 }));
     this.handleGenerateFood(this.state.stage*2);
-    this.setState((prevState) => ({ timer: prevState.timer + 4 }))
+    this.setState((prevState) => ({ timer: prevState.timer+this.state.stage+2 }))
   }
 
   handlePickUpFood = () => {
@@ -106,9 +111,10 @@ class App extends Component {
       const posX = Math.round(this.state.playerPos[0]-(this.player.size/2));
       const posY = Math.round(this.state.playerPos[1]-(this.player.size/2));
       if ((item >= posX && item <= (posX + (pSize+this.food.size)*2)) &&
-        (this.food.y[index] >= posY && this.food.y[index] <= (posY + (pSize+this.food.size)*2))) {
-          this.food.x.splice(index, 1)
-          this.food.y.splice(index, 1)
+      (this.food.y[index] >= posY && this.food.y[index] <= (posY + (pSize+this.food.size)*2))) {
+          this.food.color.splice(index, 1);
+          this.food.x.splice(index, 1);
+          this.food.y.splice(index, 1);
           this.setState((prevState) => ({ score: prevState.score + 1055 }))
       }
     });
@@ -129,8 +135,10 @@ class App extends Component {
     for (let i = 0; i < num; i++) {
       const x = ~~(Math.random()*(this.map.width-(this.food.size*2)));
       const y = ~~(Math.random()*(this.map.height-(this.food.size*2)));
+      const color = `rgb(${~~(Math.random()*105)+150}, ${~~(Math.random()*80)}, ${~~(Math.random()*32)}`
       this.food.x.push(x);
       this.food.y.push(y);
+      this.food.color.push(color);
     }
   }
   
@@ -280,7 +288,9 @@ class App extends Component {
                 left: this.state.playerPos[0],
               }}
               />
-            <Food 
+            <Food
+              id={this.food.id}
+              color={this.food.color}
               foodX={this.food.x}
               foodY={this.food.y}
               foodSize={this.food.size}

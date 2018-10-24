@@ -59,7 +59,7 @@ span {
 }
 
 .food {
-  background: rgb(255, 32, 32);
+  /* background: rgb(255, 32, 32); */
   display: inherit;
   position: absolute; 
   margin: 0;
@@ -70,7 +70,7 @@ span {
 }
 
 .uiBar {
-  margin: 10% auto;
+  margin: 5% auto;
   margin-bottom: 0;
   max-width: 100%;
   display: flex;
