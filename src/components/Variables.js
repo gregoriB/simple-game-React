@@ -26,7 +26,7 @@ export const  player = {
   moveDown: '',
   size: 12,
   speed: 10, // larger is slower, 10 is the fastest.
-  stride: 4 // How far the player moves with each move input. Also affects the movement speed.
+  stride: 4 // how far the player moves with each move input. Also affects the movement speed.
 }
 
 export const  food = {

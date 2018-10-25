@@ -38,7 +38,7 @@ class App extends Component {
       this.handleStartTimer();
     }, 2998);
   }
-  //Change this to affect the difficulty.
+  //change this to affect the difficulty
   handleNextStage = () => {
     this.setState((prevState) => ({ stage: prevState.stage + 1 }));
     food.generateFood(this.state.stage*2);
@@ -106,7 +106,7 @@ class App extends Component {
   }
 
 
-    //Called from the function in Player.js to set the movement state
+    //called from the function in Player.js to set the movement state
   handlePlayerMove = (newPlayerPos) => {
     this.setState(() => ({ playerPos: newPlayerPos }));
   }
@@ -125,29 +125,27 @@ class App extends Component {
 
   render() {
     return (
-      <>
-        <div className='app' style={{ minWidth: map.width }}>
-          <UI 
-            audio={this.state.audio}
-            gameOver={this.handleGameOver}
-            setHighScore={this.handleHighScore}
-            highScore={this.state.highScore}
-            newGame={this.handleNewGame}
-            score={this.state.score}
-            stage={this.state.stage}
-            volume={this.handleVolume}
-            />
-          <Map 
-            timer={this.state.timer}
-            nextStage={this.handleNextStage}
-            playerMovement={this.handlePlayerMove}
-            playerPos={this.state.playerPos}
-            stage={this.state.stage}
-            updateScore={this.handleUpdateScore}
+      <div className='app' style={{ minWidth: map.width }}>
+        <UI 
+          audio={this.state.audio}
+          gameOver={this.handleGameOver}
+          setHighScore={this.handleHighScore}
+          highScore={this.state.highScore}
+          newGame={this.handleNewGame}
+          score={this.state.score}
+          stage={this.state.stage}
+          volume={this.handleVolume}
           />
-          <h1>Use the arrow or WASD keys to move</h1>
-        </div>
-      </>
+        <Map 
+          timer={this.state.timer}
+          nextStage={this.handleNextStage}
+          playerMovement={this.handlePlayerMove}
+          playerPos={this.state.playerPos}
+          stage={this.state.stage}
+          updateScore={this.handleUpdateScore}
+        />
+        <h1>Use the arrow or WASD keys to move</h1>
+      </div>
     );
   }
 }

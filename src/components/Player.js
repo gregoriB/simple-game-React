@@ -7,7 +7,7 @@ class Player extends Component {
     if (food.x.length === 0) {
       return this.props.nextStage();
     }
-    if (player.isReady) {  //Prevents the player from picking up food during if is spawns on them during the pre-game countdown.
+    if (player.isReady) {  //prevents the player from picking up food during if is spawns on them during the pre-game countdown.
       food.x.forEach((item, index) => {
         const pSize = player.size;
         const posX = Math.round(this.props.playerPos[0]-(player.size/2));
@@ -34,8 +34,8 @@ class Player extends Component {
     this.props.playerMovement(newPlayerPos);
   }
 
-   // Using intervals for continous movement as a workaround to avoid key repeat from the operating system.
-   // Only the first keypress is registered and the interval continues until the key registers a 'keyup'.
+   // using intervals for continous movement as a workaround to avoid key repeat from the operating system.
+   // only the first keypress is registered and the interval continues until the key registers a 'keyup'.
   handleDirections = (e) => {
     e.preventDefault();
     switch(e.key) {
@@ -96,7 +96,7 @@ class Player extends Component {
     clearInterval(player.moveDown);
   }
 
-   //Removes the interval set to a key to stop movement and allows the key input to register again.
+   //removes the interval set to a key to stop movement and allows the key input to register again.
   handleKeyup = (e) => {
     e.preventDefault();
     switch(e.key) {
