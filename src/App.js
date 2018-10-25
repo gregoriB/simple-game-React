@@ -32,7 +32,7 @@ class App extends Component {
     audio.song.currentTime = 0;
     audio.song.play();
     food.generateFood(1);
-    this.handleRemoveAudioLoop();
+    this.handleAddAudioLoop();
     this.handlePregameCountdown();
     data.timeout = setTimeout(() => {
       this.handleStartTimer();
@@ -55,10 +55,7 @@ class App extends Component {
     player.isReady = false;
     this.setState(() => ({ timer: 'GAME OVER' }))
     this.handleHighScore();
-    audio.song.removeEventListener('ended', () => {
-      audio.song.currentTime = 0;
-      audio.song.play();
-    }, false);
+    this.handleRemoveAudioLoop();
   }
 
 
@@ -82,13 +79,19 @@ class App extends Component {
     this.setState((prevState) => ({ audio: !prevState.audio }));
   }
   
-  handleRemoveAudioLoop = () => {
+  handleAddAudioLoop = () => {
     audio.song.addEventListener('ended', () => {
       audio.song.currentTime = 0;
       audio.song.play();
     }, false);
   }
 
+  handleRemoveAudioLoop = () => {
+    audio.song.removeEventListener('ended', () => {
+      audio.song.currentTime = 0;
+      audio.song.play();
+    }, false);
+  }
   
   //TIMER STUFF
   handleStartTimer = () => {
