@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './components/styles/styles.css';
 import { audio, player, food, map, data } from './components/Variables';
 import Map from './components/Map';
-import UI from './components/UI'
+import UI from './components/UI';
 
 class App extends Component {
 
@@ -11,7 +11,7 @@ class App extends Component {
     highScore: 0,
     playerPos: [100, 240],
     score: 0,
-    state: 0,
+    stage: 0,
     timer: undefined
   }
   
@@ -34,7 +34,7 @@ class App extends Component {
     food.generateFood(1);
     this.handleRemoveAudioLoop();
     this.handlePregameCountdown();
-    setTimeout(() => {
+    data.timeout = setTimeout(() => {
       this.handleStartTimer();
     }, 2998);
   }
@@ -131,7 +131,7 @@ class App extends Component {
             highScore={this.state.highScore}
             newGame={this.handleNewGame}
             score={this.state.score}
-            stage={this.state.state}
+            stage={this.state.stage}
             volume={this.handleVolume}
             />
           <Map 

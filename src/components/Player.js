@@ -7,18 +7,20 @@ class Player extends Component {
     if (food.x.length === 0) {
       return this.props.nextStage();
     }
-    food.x.forEach((item, index) => {
-      const pSize = player.size;
-      const posX = Math.round(this.props.playerPos[0]-(player.size/2));
-      const posY = Math.round(this.props.playerPos[1]-(player.size/2));
-      if ((item >= posX && item <= (posX + (pSize+food.size)*2)) &&
-         (food.y[index] >= posY && food.y[index] <= (posY + (pSize+food.size)*2))) {
-            food.color.splice(index, 1);
-            food.x.splice(index, 1);
-            food.y.splice(index, 1);
-            this.props.updateScore();
-        }
-    });
+    if (player.isReady) {  //Prevents the player from picking up food during if is spawns on them during the pre-game countdown.
+      food.x.forEach((item, index) => {
+        const pSize = player.size;
+        const posX = Math.round(this.props.playerPos[0]-(player.size/2));
+        const posY = Math.round(this.props.playerPos[1]-(player.size/2));
+        if ((item >= posX && item <= (posX + (pSize+food.size)*2)) &&
+          (food.y[index] >= posY && food.y[index] <= (posY + (pSize+food.size)*2))) {
+              food.color.splice(index, 1);
+              food.x.splice(index, 1);
+              food.y.splice(index, 1);
+              this.props.updateScore();
+          }
+      });
+    }
   }
 
   handlePlayerMove = (index, value) => {
@@ -74,7 +76,7 @@ class Player extends Component {
         }
         break;
       default:
-        console.log(e.key);
+        break;
     }
   }
   
@@ -148,7 +150,7 @@ class Player extends Component {
         background: 'black',
         position: 'absolute',
         left: this.props.playerPos[0],
-        top: this.props.playerPos[1],
+        top: this.props.playerPos[1]
       }}
       />
     )
