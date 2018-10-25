@@ -28,15 +28,17 @@ class UI extends Component {
           <button 
             className='startButton' 
             onClick={this.props.newGame}
-          >
+            >
             {this.props.stage > 0 ? 'RESET' : 'START'}
           </button>
+          <div className='muteButton'>
           <button 
             onClick={this.handleVolume}
             className={this.props.audio ? 'notMuted' : 'muted'}
           >
-            {this.props.audio ? 'mute' : 'unmute'}
+            {this.props.audio ? 'MUTE' : 'UNMUTE'}
           </button>
+          </div>
           <p className='score'>Score: <span>{this.props.score}</span></p>
           <p className='highScore'>Hi-Score: <span>{this.props.highScore}</span></p>
         </div>

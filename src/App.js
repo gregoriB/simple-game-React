@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './components/styles/styles.css';
+import './styles/styles.css';
 import { audio, player, food, map, data } from './components/Variables';
 import Map from './components/Map';
 import UI from './components/UI';
