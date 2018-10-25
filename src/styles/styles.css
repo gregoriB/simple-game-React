@@ -86,13 +86,14 @@ span {
 .score {
   margin-left: auto;
   text-align: left;
-  width: 200px;
+  width: 220px;
 }
 
 .highScore {
   justify-self: flex-end;
+  margin-left: .5rem;
   text-align: left;
-  width: 200px;
+  width: 220px;
 }
 
 .timers p {

@@ -9,7 +9,7 @@ class Timer extends Component {
         <p 
           className='backgroundTimer'
           style={{
-            color: player.isReady ? 'white': '#e33',
+            color: player.isReady ? 'white': '#d22',
             fontSize: player.isReady ? '2rem': '3.5rem',
           }}
         >
