@@ -1,29 +1,32 @@
 import React from 'react';
+import { food } from './Variables';
 import FoodPiece from './FoodPiece';
 import uuid from 'uuid';
 
-const Food = (props) => {
-  let food;
-  if (props.foodX.length >= 0) {
-    food = props.foodX.map((item, index) => {
+const Food = () => {
+  let foodItems;
+  if (food.x.length >= 0) {
+    foodItems = food.x.map((item, index) => {
       return (
         <FoodPiece
           index={index}
           key={uuid()}
-          foodX={item}
-          foodY={props.foodY[index]}     
-          foodSize={props.foodSize}
-          color={props.color[index]}
+          foodX={food.x[index]}
+          foodY={food.y[index]}     
+          foodSize={food.size}
+          color={food.color[index]}
         />
       );
     });
   }
 
   return (
-    <div>
-      {food}
-    </div>
+    <>
+      {foodItems}
+    </>
   )
 }
 
+
 export default Food;
+
