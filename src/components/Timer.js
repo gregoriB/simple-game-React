@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { player } from './Variables';
+import { player } from '../helpers/variables';
 
 class Timer extends Component {
 

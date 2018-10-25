@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './styles/styles.css';
-import { audio, player, food, map, data } from './components/Variables';
+import { audio, player, food, map, data } from './helpers/variables';
 import Map from './components/Map';
 import UI from './components/UI';
+import uuid from 'uuid';
 
 class App extends Component {
 
@@ -27,11 +28,12 @@ class App extends Component {
       timer: 3
     }));
     player.isReady = false;
+    food.key = uuid();
     food.x = [];
     food.y = [];
+    food.generateFood(1);
     audio.song.currentTime = 0;
     audio.song.play();
-    food.generateFood(1);
     this.handleAddAudioLoop();
     this.handlePregameCountdown();
     data.timeout = setTimeout(() => {
@@ -43,7 +45,7 @@ class App extends Component {
     this.setState((prevState) => ({ stage: prevState.stage + 1 }));
     food.generateFood(this.state.stage*2);
     this.setState((prevState) => ({ 
-      timer: prevState.timer+Math.ceil(this.state.stage+4/(this.state.stage)) 
+      timer: prevState.timer+Math.ceil(this.state.stage/(1+(this.state.stage*.006))) 
     }));
   }
   
@@ -97,7 +99,7 @@ class App extends Component {
   handleStartTimer = () => {
     player.isReady = true;
     clearInterval(data.countdown);
-    this.setState(() => ({ timer: 10, score: 0 }));
+    this.setState(() => ({ timer: 20, score: 0 }));
     data.countdown = setInterval(() => { this.setState((prevState) => ({ timer: prevState.timer-1 })) }, 1000);
   }
   

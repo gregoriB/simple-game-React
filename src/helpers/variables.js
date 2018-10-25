@@ -15,7 +15,7 @@ export let canMove = {
 
 export let data = {
   countdown: undefined,
-  timeout: undefined
+  timeout: undefined,
 }
 
 export const  player = {
@@ -30,9 +30,11 @@ export const  player = {
 }
 
 export const  food = {
+  key: '',
   x: [],
   y: [],
   color: [],
+  foodItem: '',
   size: Math.ceil(player.size / 3),
   generateFood: (num) => {
     for (let i = 0; i < num; i++) {

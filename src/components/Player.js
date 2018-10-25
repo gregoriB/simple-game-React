@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { canMove, food, player, map } from './Variables';
+import { canMove, food, player, map } from '../helpers/variables';
 
 class Player extends Component {
 
@@ -129,6 +129,14 @@ class Player extends Component {
     document.addEventListener('keydown', (e) => this.handleKeydown(e));
     document.addEventListener('keyup', (e) => this.handleKeyup(e));
   }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   if (JSON.stringify(nextProps) === JSON.stringify(this.props)) {
+  //         return false;
+  //      } 
+
+  //  return true;
+  // }
 
   componentDidUpdate() {
     if (this.props.stage) {
