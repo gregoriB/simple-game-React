@@ -45,7 +45,7 @@ class App extends Component {
     this.setState((prevState) => ({ stage: prevState.stage + 1 }));
     food.generateFood(this.state.stage*2);
     this.setState((prevState) => ({ 
-      timer: prevState.timer+Math.ceil(this.state.stage/(1+(this.state.stage*.006))) 
+      timer: prevState.timer+Math.ceil(this.state.stage/(1+(this.state.stage*.01)))
     }));
   }
   
@@ -72,7 +72,7 @@ class App extends Component {
   }
 
   handleUpdateScore = () => {
-    this.setState((prevState) => ({ score: prevState.score + 1055 }));
+    this.setState((prevState) => ({ score: prevState.score + 1250 }));
   }
   
   

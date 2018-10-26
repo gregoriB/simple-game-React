@@ -23,7 +23,6 @@ h1 {
   width: 100%;
 }
 
-
 p {
   font-size: 1.1rem;
   margin: 0;
@@ -100,7 +99,6 @@ span {
   color: white;
   font-size: 2rem;
   font-weight: 700;
-  position: absolute;
   position: relative;
   text-align: center;
 }
