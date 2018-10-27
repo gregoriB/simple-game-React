@@ -3,6 +3,10 @@ import { canMove, food, player, map } from '../helpers/variables';
 
 class Player extends Component {
 
+  state = {
+    isPickingUp: false
+  }
+
   handlePickUpFood = () => {
     if (food.x.length === 0) {
       return this.props.nextStage();
@@ -12,12 +16,14 @@ class Player extends Component {
         const pSize = player.size;
         const posX = Math.round(this.props.playerPos[0]-(player.size/2));
         const posY = Math.round(this.props.playerPos[1]-(player.size/2));
-        if ((item >= posX-4 && item <= (posX + (pSize+food.size)*2)) &&
-           (food.y[index] >= posY-4 && food.y[index] <= (posY + (pSize+food.size)*2))) {
+        if ((item >= posX-2 && item <= (posX + (pSize+food.size)*2)) &&
+           (food.y[index] >= posY-2 && food.y[index] <= (posY + (pSize+food.size)*2))) {
               food.color.splice(index, 1);
               food.x.splice(index, 1);
               food.y.splice(index, 1);
               this.props.updateScore();
+              this.setState(() => ({ isPickingUp: true }));
+              setTimeout(() => { this.setState(() => ({ isPickingUp: false })) }, 80)
           }
       });
     }
@@ -130,14 +136,6 @@ class Player extends Component {
     document.addEventListener('keyup', (e) => this.handleKeyup(e));
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   if (JSON.stringify(nextProps) === JSON.stringify(this.props)) {
-  //         return false;
-  //      } 
-
-  //  return true;
-  // }
-
   componentDidUpdate() {
     if (this.props.stage) {
       this.handlePickUpFood();
@@ -155,7 +153,8 @@ class Player extends Component {
       className='player'
       style={{
         padding: player.size,
-        background: 'black',
+        background: this.state.isPickingUp ? '#222' : 'black',
+        transform: this.state.isPickingUp ? 'scale(1.2)' : null,
         position: 'absolute',
         left: this.props.playerPos[0],
         top: this.props.playerPos[1]

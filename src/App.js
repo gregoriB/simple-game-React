@@ -8,7 +8,6 @@ import uuid from 'uuid';
 class App extends Component {
 
   state = {
-    audio: true,
     highScore: 0,
     playerPos: [100, 240],
     score: 0,
@@ -74,13 +73,9 @@ class App extends Component {
   handleUpdateScore = () => {
     this.setState((prevState) => ({ score: prevState.score + 1250 }));
   }
-  
-  
+
+
   //AUDIO STUFF
-  handleVolume = () => {
-    this.setState((prevState) => ({ audio: !prevState.audio }));
-  }
-  
   handleAddAudioLoop = () => {
     audio.song.addEventListener('ended', () => {
       audio.song.currentTime = 0;
@@ -95,6 +90,7 @@ class App extends Component {
     }, false);
   }
   
+
   //TIMER STUFF
   handleStartTimer = () => {
     player.isReady = true;
@@ -129,15 +125,11 @@ class App extends Component {
     return (
       <div className='app' style={{ minWidth: map.width }}>
         <UI 
-          audio={this.state.audio}
-          gameOver={this.handleGameOver}
-          setHighScore={this.handleHighScore}
           highScore={this.state.highScore}
           newGame={this.handleNewGame}
           score={this.state.score}
           stage={this.state.stage}
-          volume={this.handleVolume}
-          />
+        />
         <Map 
           timer={this.state.timer}
           nextStage={this.handleNextStage}
