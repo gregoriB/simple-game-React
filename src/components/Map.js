@@ -1,8 +1,9 @@
 import React from 'react';
-import { food, map } from '../helpers/variables';
+import { food, hazards, map } from '../helpers/variables';
 import Food from './Food';
 import Player from './Player';
 import Timer from './Timer';
+import Hazards from './Hazards';
 
 const Map = (props) => {
 
@@ -16,10 +17,13 @@ const Map = (props) => {
         }}
     >
       <Player
+        // hazards={this.state.hazards}
+        gameOver={props.gameOver}
         nextStage={props.nextStage}
         playerMovement={props.playerMovement}
         playerPos={props.playerPos}
         stage={props.stage}
+        timer={props.timer}
         updateScore={props.updateScore}
       />
       <Food 
@@ -27,7 +31,14 @@ const Map = (props) => {
         foodLength={food.x.length}
         foodKey={food.key}
       />
-      <Timer timer={props.timer} />
+      <Hazards 
+        hazards={hazards.x}
+        stage={props.stage}
+        timer={props.timer}
+      />
+      <Timer 
+        timer={props.timer} 
+      />
     </div>
   )
 }

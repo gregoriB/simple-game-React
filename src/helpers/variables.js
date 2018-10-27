@@ -48,6 +48,41 @@ export const  food = {
   }
 }
 
+export const hazards = {
+  stages: [],
+  x: [],
+  y: [],
+  direction: [],
+  size: 12,
+  speed: 1,
+  color: 'white',
+  generateHazard: () => {
+    const random = ~~(Math.random()*300);
+    let horizontal;
+    let vertical;
+    let X;
+    if (random > 200) {
+      X = 960;
+    } 
+    if (random <= 200) {
+      X = -40;
+    }
+    if (random % 2 === 0) {
+      horizontal = 'right';
+    } else {
+      horizontal = 'left';
+    }
+    if (random % 2 === 0) {
+      vertical = 'down';
+    } else {
+      vertical = 'up';
+    }
+    hazards.x.push(X);
+    hazards.y.push(random);
+    hazards.direction.push([horizontal, vertical]);
+  }
+}
+
 export const map = {
   height: player.size * 40,
   width: player.size * 80

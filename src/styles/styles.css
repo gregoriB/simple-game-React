@@ -55,6 +55,26 @@ span {
   z-index: 2;
 }
 
+.hazard {
+  background: rgb(184, 196, 199);
+  margin: 0;
+  position: absolute;
+  border: 4px dotted rgb(0, 0, 0);
+  border-radius: 50%;
+  animation-name: spin;
+  animation-duration: 2000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes spin {
+  from {
+      transform:rotate(0deg);
+  }
+  to {
+      transform:rotate(360deg);
+  }
+}
 .food {
   border: 1px solid rgba(3, 3, 3, 0.7);
   border-radius: 50%;

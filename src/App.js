@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './styles/styles.css';
-import { audio, player, food, map, data } from './helpers/variables';
+import { audio, hazards, player, food, map, data } from './helpers/variables';
 import Map from './components/Map';
 import UI from './components/UI';
 import uuid from 'uuid';
@@ -8,6 +8,7 @@ import uuid from 'uuid';
 class App extends Component {
 
   state = {
+    hazards: [],
     highScore: 0,
     playerPos: [100, 240],
     score: 0,
@@ -15,6 +16,11 @@ class App extends Component {
     timer: undefined
   }
   
+  handleAddHazardState = () =>{
+    this.setState((prevState) => ({ hazards: prevState.hazards.concat }))
+  }
+
+
 
   //GAME STATE STUFF
   handleNewGame = () => {
@@ -27,6 +33,10 @@ class App extends Component {
       timer: 3
     }));
     player.isReady = false;
+    hazards.speed = 1;
+    hazards.stages = [];
+    hazards.x = [];
+    hazards.y = [];
     food.key = uuid();
     food.x = [];
     food.y = [];
@@ -50,6 +60,7 @@ class App extends Component {
   
   handleGameOver = () => {
     clearInterval(data.countdown)
+    hazards.speed = 0;
     audio.song.pause();
     audio.song.currentTime = 0;
     audio.explosion.play();
@@ -66,8 +77,7 @@ class App extends Component {
       return;
     }
     this.setState(() => ({ highScore: this.state.score }))
-    const highScore = JSON.stringify(this.state.score);
-    localStorage.setItem('highScore', highScore);
+    localStorage.setItem('highScore', JSON.stringify(this.state.score));
   }
 
   handleUpdateScore = () => {
@@ -95,7 +105,7 @@ class App extends Component {
   handleStartTimer = () => {
     player.isReady = true;
     clearInterval(data.countdown);
-    this.setState(() => ({ timer: 20, score: 0 }));
+    this.setState(() => ({ timer: 200, score: 0 }));
     data.countdown = setInterval(() => { this.setState((prevState) => ({ timer: prevState.timer-1 })) }, 1000);
   }
   
@@ -131,11 +141,13 @@ class App extends Component {
           stage={this.state.stage}
         />
         <Map 
-          timer={this.state.timer}
+        hazards={this.state.hazards}
+          gameOver={this.handleGameOver}
           nextStage={this.handleNextStage}
           playerMovement={this.handlePlayerMove}
           playerPos={this.state.playerPos}
           stage={this.state.stage}
+          timer={this.state.timer}
           updateScore={this.handleUpdateScore}
         />
         <h1>Use the arrow or WASD keys to move</h1>

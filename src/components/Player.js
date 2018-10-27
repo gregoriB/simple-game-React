@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { canMove, food, player, map } from '../helpers/variables';
+import { canMove, food, hazards, player, map } from '../helpers/variables';
 
 class Player extends Component {
 
@@ -14,19 +14,31 @@ class Player extends Component {
     if (player.isReady) {  //prevents the player from picking up food during if is spawns on them during the pre-game countdown.
       food.x.forEach((item, index) => {
         const pSize = player.size;
-        const posX = Math.round(this.props.playerPos[0]-(player.size/2));
-        const posY = Math.round(this.props.playerPos[1]-(player.size/2));
+        const posX = Math.round(this.props.playerPos[0]-(pSize/2));
+        const posY = Math.round(this.props.playerPos[1]-(pSize/2));
         if ((item >= posX-2 && item <= (posX + (pSize+food.size)*2)) &&
-           (food.y[index] >= posY-2 && food.y[index] <= (posY + (pSize+food.size)*2))) {
-              food.color.splice(index, 1);
-              food.x.splice(index, 1);
-              food.y.splice(index, 1);
-              this.props.updateScore();
-              this.setState(() => ({ isPickingUp: true }));
-              setTimeout(() => { this.setState(() => ({ isPickingUp: false })) }, 80)
-          }
+        (food.y[index] >= posY-2 && food.y[index] <= (posY + (pSize+food.size)*2))) {
+          food.color.splice(index, 1);
+          food.x.splice(index, 1);
+          food.y.splice(index, 1);
+          this.props.updateScore();
+          this.setState(() => ({ isPickingUp: true }));
+          setTimeout(() => { this.setState(() => ({ isPickingUp: false })) }, 80)
+        }
       });
     }
+  }
+
+  handleTouchHazard = () => {
+    hazards.x.forEach((item, index) => {
+      const pSize = player.size;
+      const posX = Math.round(this.props.playerPos[0]-(pSize/2));
+      const posY = Math.round(this.props.playerPos[1]-(pSize/2));
+      if ((item >= posX - hazards.size*1.7 && item <= posX + (hazards.size*1.7)) &&
+      (hazards.y[index] >= posY - hazards.size*1.7 && hazards.y[index] <= posY + (hazards.size*1.7))) {
+        this.props.gameOver();
+      }
+    });
   }
 
   handlePlayerMove = (index, value) => {
@@ -139,12 +151,20 @@ class Player extends Component {
   componentDidUpdate() {
     if (this.props.stage) {
       this.handlePickUpFood();
+      this.handleTouchHazard();
     }
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', (e) => this.handleKeydown(e));
     document.removeEventListener('keyup', (e) => this.handleKeyup(e));
+  }
+
+  shouldComponentUpdate() {
+    if (this.props.timer === 'GAME OVER') {
+      return false;
+    }
+    return true;
   }
 
   render() {
