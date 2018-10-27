@@ -150,7 +150,7 @@ class App extends Component {
           timer={this.state.timer}
           updateScore={this.handleUpdateScore}
         />
-        <h1>Use the arrow or WASD keys to move</h1>
+        <h1>THIS IS THE EXPERIMENTAL BRANCH!!</h1>
       </div>
     );
   }
