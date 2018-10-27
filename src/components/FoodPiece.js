@@ -1,20 +1,20 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 
-class FoodPiece extends PureComponent {
+const FoodPiece = (props) => {
 
-  render() {
-    return (
-      <div 
-        className='food'
-        style={{
-          background: this.props.color,
-          top: this.props.foodY,
-          left: this.props.foodX,
-          padding: this.props.foodSize,
-        }}
-      />
-    )
-  }
+  const { color, foodSize, foodX, foodY } = props;
+
+  return (
+    <div 
+      className='food'
+      style={{
+        background: color,
+        top: foodY,
+        left: foodX,
+        padding: foodSize,
+      }}
+    />
+  )
 }
 
 export default FoodPiece;

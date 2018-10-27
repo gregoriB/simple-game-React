@@ -8,6 +8,7 @@ import uuid from 'uuid';
 class App extends Component {
 
   state = {
+    gameOver: true,
     highScore: 0,
     playerPos: [100, 240],
     score: 0,
@@ -21,17 +22,14 @@ class App extends Component {
     clearInterval(data.countdown);
     clearTimeout(data.timeout);
     this.setState(() => ({ 
+      gameOver: false,
       playerPos: [(map.width/2)-(player.size)-1, (map.height/2)], 
       score: 0, 
       stage: 1, 
       timer: 3
     }));
-    player.isReady = false;
-    food.key = uuid();
-    food.x = [];
-    food.y = [];
+    this.handleInitializeVariables();
     food.generateFood(1);
-    audio.song.currentTime = 0;
     audio.song.play();
     this.handleAddAudioLoop();
     this.handlePregameCountdown();
@@ -39,6 +37,17 @@ class App extends Component {
       this.handleStartTimer();
     }, 2998);
   }
+
+  handleInitializeVariables = () => {
+    player.isReady = false;
+    data.gameOver = false;
+    food.key = uuid();
+    food.x = [];
+    food.y = [];
+    audio.song.currentTime = 0;
+  }
+
+
   //change this to affect the difficulty
   handleNextStage = () => {
     this.setState((prevState) => ({ stage: prevState.stage + 1 }));
@@ -50,11 +59,12 @@ class App extends Component {
   
   handleGameOver = () => {
     clearInterval(data.countdown)
+    data.gameOver = true;
     audio.song.pause();
     audio.song.currentTime = 0;
     audio.explosion.play();
     player.isReady = false;
-    this.setState(() => ({ timer: 'GAME OVER' }))
+    this.setState(() => ({ gameOver: true, timer: 'GAME OVER' }));
     this.handleHighScore();
     this.handleRemoveAudioLoop();
   }
@@ -109,7 +119,7 @@ class App extends Component {
     this.setState(() => ({ playerPos: newPlayerPos }));
   }
   
-
+  
   componentDidMount() {
     const highScore = JSON.parse(localStorage.getItem('highScore'));
     this.setState(() => ({ highScore: highScore }));               
@@ -122,21 +132,26 @@ class App extends Component {
   }
 
   render() {
+
+    const { gameOver, highScore, playerPos, score, stage, timer } = this.state;
+    const { handleNextStage, handleNewGame, handlePlayerMove, handleUpdateScore } = this;
+
     return (
       <div className='app' style={{ minWidth: map.width }}>
         <UI 
-          highScore={this.state.highScore}
-          newGame={this.handleNewGame}
-          score={this.state.score}
-          stage={this.state.stage}
+          gameOver={gameOver}
+          highScore={highScore}
+          newGame={handleNewGame}
+          score={score}
+          stage={stage}
         />
         <Map 
-          timer={this.state.timer}
-          nextStage={this.handleNextStage}
-          playerMovement={this.handlePlayerMove}
-          playerPos={this.state.playerPos}
-          stage={this.state.stage}
-          updateScore={this.handleUpdateScore}
+          timer={timer}
+          nextStage={handleNextStage}
+          playerMovement={handlePlayerMove}
+          playerPos={playerPos}
+          stage={stage}
+          updateScore={handleUpdateScore}
         />
         <h1>Use the arrow or WASD keys to move</h1>
       </div>

@@ -15,7 +15,7 @@ export let canMove = {
 
 export let data = {
   countdown: undefined,
-  timeout: undefined,
+  timeout: undefined
 }
 
 export const  player = {
@@ -38,12 +38,12 @@ export const  food = {
   size: Math.ceil(player.size / 3),
   generateFood: (num) => {
     for (let i = 0; i < num; i++) {
-    const X = ~~(Math.random()*(map.width-(food.size*2)));
-    const Y = ~~(Math.random()*(map.height-(food.size*2)));
-    const color = `rgb(${~~(Math.random()*105)+150}, ${~~(Math.random()*80)}, ${~~(Math.random()*32)}`
-    food.x.push(X);
-    food.y.push(Y);
-    food.color.push(color);
+      const X = ~~(Math.random()*(map.width-(food.size*2)));
+      const Y = ~~(Math.random()*(map.height-(food.size*2)));
+      const color = `rgb(${~~(Math.random()*105)+150}, ${~~(Math.random()*80)}, ${~~(Math.random()*32)}`
+      food.x.push(X);
+      food.y.push(Y);
+      food.color.push(color);
     }
   }
 }

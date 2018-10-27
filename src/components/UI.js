@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { audio, } from '../helpers/variables';
+import { audio, data, } from '../helpers/variables';
 
 class UI extends Component {
 
@@ -25,6 +25,7 @@ class UI extends Component {
     if (isMuted) {
       audio.song.volume = 0;
       audio.explosion.volume = 0;
+
       return;
     }
     audio.song.volume = .3;
@@ -35,7 +36,7 @@ class UI extends Component {
     if ((JSON.stringify(nextProps) !== JSON.stringify(this.props)) ||
        ( this.state.isMuted !== nextState.isMuted)) {
           return true;
-       } 
+       }
 
    return false;
   }
@@ -47,26 +48,31 @@ class UI extends Component {
   }
 
   render() {
+
+    const { gameOver, highScore, newGame, score, stage } = this.props;
+    const { isMuted } = this.state;
+    const { handleToggleVolume } = this;
+
     return (
       <>
         <div className='uiBar'>
-          <p className='stageCounter'>Stage: <span>{this.props.stage}</span></p>
+          <p className='stageCounter'>Stage: <span>{stage}</span></p>
           <button 
             className='startButton' 
-            onClick={this.props.newGame}
+            onClick={newGame}
             >
-            {this.props.stage > 0 ? 'RESET' : 'START'}
+            {gameOver ? 'START' : 'RESET'}
           </button>
           <div className='muteButton'>
           <button 
-            onClick={this.handleToggleVolume}
-            className={this.state.isMuted ? 'muted' : 'notMuted'}
+            onClick={handleToggleVolume}
+            className={isMuted ? 'muted' : 'notMuted'}
           >
-            {this.state.isMuted ? 'UNMUTE' : 'MUTE'}
+            {isMuted ? 'UNMUTE' : 'MUTE'}
           </button>
           </div>
-          <p className='score'>Score: <span>{this.props.score}</span></p>
-          <p className='highScore'>Hi-Score: <span>{this.props.highScore}</span></p>
+          <p className='score'>Score: <span>{score}</span></p>
+          <p className='highScore'>Hi-Score: <span>{highScore}</span></p>
         </div>
       </>
     )

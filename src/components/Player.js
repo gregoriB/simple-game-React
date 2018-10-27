@@ -9,6 +9,7 @@ class Player extends Component {
 
   handlePickUpFood = () => {
     if (food.x.length === 0) {
+      
       return this.props.nextStage();
     }
     if (player.isReady) {  //prevents the player from picking up food during if is spawns on them during the pre-game countdown.
@@ -90,6 +91,7 @@ class Player extends Component {
     e.preventDefault();
     if (!player.isReady) {
       this.handleClearMovement();
+
       return;
     }
     this.handleDirections(e);
@@ -148,17 +150,21 @@ class Player extends Component {
   }
 
   render() {
+
+    const { isPickingUp } = this.state;
+    const { playerPos } = this.props;
+
     return (
       <div              
-      className='player'
-      style={{
-        padding: player.size,
-        background: this.state.isPickingUp ? '#222' : 'black',
-        transform: this.state.isPickingUp ? 'scale(1.2)' : null,
-        position: 'absolute',
-        left: this.props.playerPos[0],
-        top: this.props.playerPos[1]
-      }}
+        className='player'
+        style={{
+          padding: player.size,
+          background: isPickingUp ? '#222' : 'black',
+          transform: isPickingUp ? 'scale(1.2)' : null,
+          position: 'absolute',
+          left: playerPos[0],
+          top: playerPos[1]
+        }}
       />
     )
   }

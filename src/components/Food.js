@@ -9,6 +9,7 @@ class Food extends Component {
   handlePopulateFood = () => {
     if (food.x.length >= 0) {
       this.foodPiece = food.x.map((item, index) => {
+
         return (
           <FoodPiece
             index={index}
@@ -22,12 +23,15 @@ class Food extends Component {
       });
     }
   }
-    
-  shouldComponentUpdate(nextProps) {  //food only updates when one is picked up or reset button is pressed
+  
+  //food only updates when one is picked up or reset button is pressed
+  shouldComponentUpdate(nextProps) {
     if ((this.props.foodLength !== nextProps.foodLength) ||
        (this.props.foodKey !== nextProps.foodKey)) {
+
       return true;
     }
+
     return false;
   }
 
@@ -36,6 +40,7 @@ class Food extends Component {
   }
 
   render() {
+    
     return (
       <>
         {this.foodPiece}
