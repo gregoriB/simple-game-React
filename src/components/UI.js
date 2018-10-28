@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { audio, data, } from '../helpers/variables';
+import { audio } from '../helpers/variables';
 
 class UI extends Component {
 

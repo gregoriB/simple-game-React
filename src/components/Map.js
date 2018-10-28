@@ -28,6 +28,7 @@ const Map = (props) => {
         //only used to determine whether or not to update in <Food />
         foodLength={food.x.length}
         foodKey={food.key}
+        stage={stage}
       />
       <Timer timer={timer} />
     </div>
