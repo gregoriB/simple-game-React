@@ -49,12 +49,13 @@ export const  food = {
 }
 
 export const hazards = {
+  isMoving: [],
   stages: [],
   x: [],
   y: [],
   direction: [],
   size: 12,
-  speed: 1,
+  speed: '',
   color: 'white',
   generateHazard: () => {
     const random = ~~(Math.random()*300);
@@ -80,6 +81,7 @@ export const hazards = {
     hazards.x.push(X);
     hazards.y.push(random);
     hazards.direction.push([horizontal, vertical]);
+    hazards.isMoving.push(false);
   }
 }
 

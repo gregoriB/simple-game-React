@@ -3,6 +3,15 @@ import { player } from '../helpers/variables';
 
 class Timer extends Component {
 
+
+  shouldComponentUpdate(nextProps) {
+    if (this.props.timer === nextProps.timer) {
+      return false;
+    }
+
+    return true;
+  }
+
   render() {
     return (
       <div className='timers'>

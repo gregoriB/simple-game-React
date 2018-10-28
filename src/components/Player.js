@@ -29,17 +29,17 @@ class Player extends Component {
     }
   }
 
-  handleTouchHazard = () => {
-    hazards.x.forEach((item, index) => {
-      const pSize = player.size;
-      const posX = Math.round(this.props.playerPos[0]-(pSize/2));
-      const posY = Math.round(this.props.playerPos[1]-(pSize/2));
-      if ((item >= posX - hazards.size*1.7 && item <= posX + (hazards.size*1.7)) &&
-      (hazards.y[index] >= posY - hazards.size*1.7 && hazards.y[index] <= posY + (hazards.size*1.7))) {
-        this.props.gameOver();
-      }
-    });
-  }
+  // handleTouchHazard = () => {
+  //   hazards.x.forEach((item, index) => {
+  //     const pSize = player.size;
+  //     const posX = Math.round(this.props.playerPos[0]-(pSize/2));
+  //     const posY = Math.round(this.props.playerPos[1]-(pSize/2));
+  //     if ((item >= posX - hazards.size*1.7 && item <= posX + (hazards.size*1.7)) &&
+  //     (hazards.y[index] >= posY - hazards.size*1.7 && hazards.y[index] <= posY + (hazards.size*1.7))) {
+  //       this.props.gameOver();
+  //     }
+  //   });
+  // }
 
   handlePlayerMove = (index, value) => {
     const newPlayerPos = [...this.props.playerPos];
@@ -151,7 +151,7 @@ class Player extends Component {
   componentDidUpdate() {
     if (this.props.stage) {
       this.handlePickUpFood();
-      this.handleTouchHazard();
+      // this.handleTouchHazard();
     }
   }
 
