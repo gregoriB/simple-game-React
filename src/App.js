@@ -8,7 +8,6 @@ import uuid from 'uuid';
 class App extends Component {
 
   state = {
-    hazards: [],
     highScore: 0,
     playerPos: [100, 240],
     score: 0,
@@ -16,17 +15,11 @@ class App extends Component {
     timer: undefined
   }
   
-  handleAddHazardState = () =>{
-    this.setState((prevState) => ({ hazards: prevState.hazards.concat }))
-  }
-
-
-
   //GAME STATE STUFF
   handleNewGame = () => {
     clearInterval(data.countdown);
     clearTimeout(data.timeout);
-    this.setState(() => ({ 
+    this.setState(() => ({
       playerPos: [(map.width/2)-(player.size)-1, (map.height/2)], 
       score: 0, 
       stage: 1, 
@@ -45,9 +38,10 @@ class App extends Component {
     audio.song.play();
     this.handleAddAudioLoop();
     this.handlePregameCountdown();
-    data.timeout = setTimeout(() => {
-      this.handleStartTimer();
-    }, 2998);
+    // data.timeout = setTimeout(() => {
+    //   this.handleStartTimer();
+    // }, 2998);
+    this.handleStartTimer();
   }
   //change this to affect the difficulty
   handleNextStage = () => {
@@ -122,7 +116,8 @@ class App extends Component {
 
   componentDidMount() {
     const highScore = JSON.parse(localStorage.getItem('highScore'));
-    this.setState(() => ({ highScore: highScore }));               
+    this.setState(() => ({ highScore: highScore }));    
+    this.handleNewGame();           
   }
 
   componentDidUpdate() {
@@ -141,8 +136,9 @@ class App extends Component {
           stage={this.state.stage}
         />
         <Map 
-        hazards={this.state.hazards}
-          gameOver={this.handleGameOver}
+          hazardState={this.state.hazards}
+          updateHazardState={this.handleUpdateHazardState}
+          setGameOver={this.handleGameOver}
           nextStage={this.handleNextStage}
           playerMovement={this.handlePlayerMove}
           playerPos={this.state.playerPos}

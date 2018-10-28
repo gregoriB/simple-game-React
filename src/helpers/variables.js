@@ -49,7 +49,7 @@ export const  food = {
 }
 
 export const hazards = {
-  isMoving: [],
+  isMounted: false,
   stages: [],
   x: [],
   y: [],
@@ -57,31 +57,25 @@ export const hazards = {
   size: 12,
   speed: '',
   color: 'white',
-  generateHazard: () => {
-    const random = ~~(Math.random()*300);
+  generateHazard: (num) => {
     let horizontal;
     let vertical;
     let X;
-    if (random > 200) {
+    if (num > 200) {
       X = 960;
-    } 
-    if (random <= 200) {
-      X = -40;
-    }
-    if (random % 2 === 0) {
-      horizontal = 'right';
-    } else {
       horizontal = 'left';
+    } else {
+      X = -40;
+      horizontal = 'right';
     }
-    if (random % 2 === 0) {
+    if (num % 2 === 0) {
       vertical = 'down';
     } else {
       vertical = 'up';
     }
     hazards.x.push(X);
-    hazards.y.push(random);
+    hazards.y.push(num);
     hazards.direction.push([horizontal, vertical]);
-    hazards.isMoving.push(false);
   }
 }
 

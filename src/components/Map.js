@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { food, hazards, map } from '../helpers/variables';
 import Food from './Food';
 import Player from './Player';
 import Timer from './Timer';
 import Hazards from './Hazards';
 
-const Map = (props) => {
+class Map extends Component {
+
+  render() {
+
+  const { setGameOver, nextStage, playerMovement, playerPos, stage, timer, updateScore } = this.props;
 
   return (
     <div
@@ -17,30 +21,31 @@ const Map = (props) => {
         }}
     >
       <Player
-        // hazards={this.state.hazards}
-        gameOver={props.gameOver}
-        nextStage={props.nextStage}
-        playerMovement={props.playerMovement}
-        playerPos={props.playerPos}
-        stage={props.stage}
-        timer={props.timer}
-        updateScore={props.updateScore}
-      />
+        setGameOver={setGameOver}
+        nextStage={nextStage}
+        playerMovement={playerMovement}
+        playerPos={playerPos}
+        stage={stage}
+        timer={timer}
+        updateScore={updateScore}
+        />
       <Food 
         //only used to determine whether or not to update in <Food />
         foodLength={food.x.length}
         foodKey={food.key}
-      />
+        />
       <Hazards 
-        hazards={hazards.x}
-        stage={props.stage}
-        timer={props.timer}
+        hazardState={this.props.hazardState}
+        hazards={hazards.x[0]}
+        stage={stage}
+        timer={timer}
       />
       <Timer 
-        timer={props.timer} 
+        timer={timer} 
       />
     </div>
   )
+}
 }
 
 export default Map;

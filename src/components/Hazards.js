@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { hazards, map } from '../helpers/variables.js';
+import { hazards } from '../helpers/variables.js';
 import Hazard from './Hazard';
 import uuid from 'uuid';
 
@@ -15,15 +15,14 @@ class Hazards extends Component {
   }
 
   handleSpawnHazard = () => {
-    // if (this.props.stage % 5 === 0 && this.props.stage > 4) {
-      // if (this.props.state > 0) {
+    // if (this.props.stage % 5 === 0  && this.props.stage > 9) {
+    if (this.props.stage > 0 ) {
       if (hazards.stages.some(stage => this.props.stage === stage )) {
         return;
       }
-      hazards.generateHazard();
+      hazards.generateHazard(~~(Math.random()*300));
       hazards.stages.push(this.props.stage);
-      // this.interval = setInterval(() => {this.handleUpdateHazardPOS()}, 50);
-    // }
+    }
   }
 
 
@@ -38,88 +37,28 @@ class Hazards extends Component {
             hazardY={hazards.y[index]}
             hazardSize={hazards.size}
             color={hazards.color}
+            updateHazardState={this.props.updateHazardState}
           />
         )
       });
     }
   }
 
-
-  // handleHazardMoveX = (hazardX, index) => {
-  //   let newX;
-  //   const speed = hazards.speed;
-  //   const direction = hazards.direction[index];
-  //   const boundaryX = map.width - (hazards.size);    
-  //   if (direction[0] === 'right') {
-  //     if (hazardX >= boundaryX - (hazards.size * 1.5)) {
-  //       newX = (hazards.x[index] - speed);
-  //       direction.splice(0, 1, 'left');
-  //     } else {
-  //       newX = (hazards.x[index] + speed);
-  //     }
-  //   }
-  //   if (direction[0] === 'left') {
-  //     if (hazardX <= 0) {
-  //       newX = (hazards.x[index] + speed);
-  //       direction.splice(0, 1, 'right');
-  //     } else {
-  //       newX = (hazards.x[index] - speed);
-  //     }
-  //   }
-  //   hazards.x.splice(index, 1, newX);
-  //   this.setState(() => ({ hazardX: newX }))
-  // }
-
-  // handleHazardMoveY = (hazardY, index) => {
-  //   let newY;
-  //   const speed = hazards.speed;
-  //   const direction = hazards.direction[index];
-  //   const boundaryY = map.height - (hazards.size);    
-  //   if (direction[1] === 'up') {
-  //     if (hazardY >= boundaryY - (hazards.size * 1.5)) {
-  //       newY = (hazards.y[index] - speed);
-  //       direction.splice(1, 1, 'down');
-  //     } else {
-  //       newY = (hazards.y[index] + speed);
-  //     }
-  //   }
-  //   if (direction[1] === 'down') {
-  //     if (hazardY <= 0) {
-  //       newY = (hazards.y[index] + speed);
-  //       direction.splice(1, 1, 'up');
-  //     } else {
-  //       newY = (hazards.y[index] - speed);
-  //     }
-  //   }
-  //   hazards.y.splice(index, 1, newY);
-  //   this.setState(() => ({ hazards: newY }))  
-  // }
-
-  // handleUpdateHazardPOS = () => {
-  //   hazards.x.forEach((hazard, index) => {
-  //     this.handleHazardMoveX(hazards.x[index], index)
-  //     this.handleHazardMoveY(hazards.y[index], index)
-  //   });
-  // }
-
-  // componentDidMount() {
-  // }
-
+  shouldComponentUpdate() {
+    return true;
+  }
 
   componentDidMount() {
-    setInterval(() => {this.forceUpdate()}, .00000000000000000000000000000000000001);
+    setInterval(() => {this.forceUpdate()}, 1);
+  }
 
+  componentWillUnmount() {
+    console.log('unmounting')
   }
   
-  
-  
   componentWillUpdate() {
+    this.handleCreateHazardElement()
     this.handleSpawnHazard();
-
-    if (hazards.x.length > this.props.stage) {
-      this.handleCreateHazardElement();
-    }
-
   }
 
   render() {

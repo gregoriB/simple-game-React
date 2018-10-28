@@ -3,18 +3,13 @@ import { hazards, map } from '../helpers/variables';
 
 class Hazard extends Component {
 
-  state = {
-    hazardX: '',
-    hazardY: ''
-  }
-
   handleHazardMoveX = (hazardX, index) => {
     let newX;
     const speed = hazards.speed;
     const direction = hazards.direction[index];
     const boundaryX = map.width - (hazards.size);    
     if (direction[0] === 'right') {
-      if (hazardX >= boundaryX - (hazards.size * 1.5)) {
+      if (hazardX >= boundaryX - (hazards.size)) {
         newX = (hazards.x[index] - speed);
         direction.splice(0, 1, 'left');
       } else {
@@ -22,7 +17,7 @@ class Hazard extends Component {
       }
     }
     if (direction[0] === 'left') {
-      if (hazardX <= 0) {
+      if (hazardX < 0) {
         newX = (hazards.x[index] + speed);
         direction.splice(0, 1, 'right');
       } else {
@@ -30,9 +25,6 @@ class Hazard extends Component {
       }
     }
     hazards.x.splice(index, 1, newX);
-    // this.forceUpdate();
-
-    // this.setState(() => ({ hazardX: newX }))
   }
 
   handleHazardMoveY = (hazardY, index) => {
@@ -41,7 +33,7 @@ class Hazard extends Component {
     const direction = hazards.direction[index];
     const boundaryY = map.height - (hazards.size);    
     if (direction[1] === 'up') {
-      if (hazardY >= boundaryY - (hazards.size * 1.5)) {
+      if (hazardY >= boundaryY - (hazards.size)) {
         newY = (hazards.y[index] - speed);
         direction.splice(1, 1, 'down');
       } else {
@@ -57,8 +49,6 @@ class Hazard extends Component {
       }
     }
     hazards.y.splice(index, 1, newY);
-    // this.forceUpdate();
-    // this.setState(() => ({ hazardY: newY }))  
   }
 
   handleUpdateHazardPOS = () => {
@@ -68,18 +58,15 @@ class Hazard extends Component {
     });
   }
 
-  shouldComponentUpdate() {
-    return false
-  }
+  interval;
 
   componentDidMount() {
-    console.log('mounted')
-    this.handleUpdateHazardPOS();
-  }
-  
-  componentWillUpdate() {
-    // setTimeout(() => {this.forceUpdate()}, .000000000000000001);
-    console.log('updated')
+    clearInterval(this.interval)
+    if (hazards.isMounted) {
+      return;
+    }
+    hazards.isMounted = true;
+    this.interval = setInterval(() => {this.handleUpdateHazardPOS()}, 5);
   }
 
   render() {
@@ -87,6 +74,7 @@ class Hazard extends Component {
       <div 
         className='hazard'
         style={{
+          position: 'absolute',
           background: this.props.color,
           top: hazards.y[this.props.index],
           left: hazards.x[this.props.index],
