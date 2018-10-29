@@ -65,7 +65,7 @@ export const hazards = {
       X = 960;
       horizontal = 'left';
     } else {
-      X = -40;
+      X = -24;
       horizontal = 'right';
     }
     if (num % 2 === 0) {

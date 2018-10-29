@@ -71,7 +71,7 @@ class Hazard extends Component {
 
   render() {
     return (
-      <div 
+      <div
         className='hazard'
         style={{
           position: 'absolute',
@@ -80,7 +80,38 @@ class Hazard extends Component {
           left: hazards.x[this.props.index],
           padding: this.props.hazardSize,
         }}
-      />
+      >
+        <div className='marker' 
+        style={{
+          top: 0, 
+          left: 0,
+          width: hazards.size - 2,
+          height: hazards.size - 2
+          }}
+        />
+        <div className='marker' 
+        style={{
+          top: 0, 
+          left: hazards.size,
+          width: hazards.size - 2,
+          height: hazards.size - 2
+          }}
+        />
+        <div className='marker' style={{
+          top: hazards.size, 
+          left: hazards.size,
+          width: hazards.size - 2,
+          height: hazards.size - 2
+          }}
+        />
+        <div className='marker' style={{
+          top: hazards.size, 
+          left: 0,
+          width: hazards.size - 2,
+          height: hazards.size - 2
+          }}
+        />
+      </div>
     )
   }
 }

@@ -12,39 +12,61 @@ class Player extends Component {
       return this.props.nextStage();
     }
     if (player.isReady) {  //prevents the player from picking up food during if is spawns on them during the pre-game countdown.
-      food.x.forEach((item, index) => {
-        const pSize = player.size;
-        const posX = Math.round(this.props.playerPos[0]-(pSize/2));
-        const posY = Math.round(this.props.playerPos[1]-(pSize/2));
-        if ((item >= posX-2 && item <= (posX + (pSize+food.size)*2)) &&
-        (food.y[index] >= posY-2 && food.y[index] <= (posY + (pSize+food.size)*2))) {
-          food.color.splice(index, 1);
-          food.x.splice(index, 1);
-          food.y.splice(index, 1);
-          this.props.updateScore();
-          this.setState(() => ({ isPickingUp: true }));
-          setTimeout(() => { this.setState(() => ({ isPickingUp: false })) }, 80)
-        }
+      food.x.forEach((foodX, index) => {
+        const playerData = {
+                x: this.props.playerPos[0], 
+                y: this.props.playerPos[1], 
+                width: player.size*2, 
+                height: player.size*2
+              }
+        const foodData = {
+                x: foodX, 
+                y: food.y[index], 
+                width: food.size*2, 
+                height: food.size*2
+              }
+        if (  playerData.x < foodData.x + foodData.width &&
+              playerData.x + playerData.width > foodData.x &&
+              playerData.y < foodData.y + foodData.height &&
+              playerData.y + playerData.height > foodData.y ) {
+
+            food.color.splice(index, 1);
+            food.x.splice(index, 1);
+            food.y.splice(index, 1);
+            this.props.updateScore();
+            this.setState(() => ({ isPickingUp: true }));
+            setTimeout(() => { this.setState(() => ({ isPickingUp: false })) }, 80)
+          }
       });
     }
   }
 
   handleTouchHazard = () => {
-    hazards.x.forEach((item, index) => {
-      const pSize = player.size;
-      const posX = Math.round(this.props.playerPos[0]-(pSize/2));
-      const posY = Math.round(this.props.playerPos[1]-(pSize/2));
-      if ((item >= posX - (hazards.size *1.7) && item <= posX + (hazards.size * 2.8)) && //right and left respectively
-      (hazards.y[index] >= posY - hazards.size*1.8 && hazards.y[index] <= posY + (hazards.size*2.6))) {  //bottom and top respectively
-        this.props.setGameOver();
+    hazards.x.forEach((hazardX, index) => {
+      const playerData = {
+              x: this.props.playerPos[0], 
+              y: this.props.playerPos[1], 
+              size: player.size*2
+            }
+      const hazardData = {
+              x: hazardX,
+              y: hazards.y[index], 
+              size: hazards.size*2
+            }
+      if (  playerData.x < hazardData.x + hazardData.size &&
+            playerData.x + playerData.size > hazardData.x &&
+            playerData.y < hazardData.y + hazardData.size &&
+            playerData.y + playerData.size > hazardData.y ) {
+
+        return this.props.setGameOver();
       }
     });
   }
 
-  handlePlayerMove = (index, value) => {
+  handlePlayerMove = (index, distance) => {
     const newPlayerPos = [...this.props.playerPos];
     const boundary = index === 0 ? map.width-player.size : map.height-player.size;
-    newPlayerPos.splice(index, 1, newPlayerPos[index] + value)
+    newPlayerPos.splice(index, 1, newPlayerPos[index] + distance)
     if (newPlayerPos[index] < 0 || newPlayerPos[index] > boundary - player.size){
       
       return;
@@ -179,7 +201,43 @@ class Player extends Component {
         left: this.props.playerPos[0],
         top: this.props.playerPos[1]
       }}
-      />
+      >
+        <div className='playerMarker' 
+        style={{
+          top: 0, 
+          left: 0,
+          width: player.size - 2,
+          height: player.size - 2
+          }}
+        />
+        <div className='playerMarker' 
+        style={{
+          top: 0, 
+          left: player.size,
+          width: player.size - 2,
+          height: player.size - 2
+          }}
+        />
+        <div className='playerMarker' style={{
+          top: player.size, 
+          left: player.size,
+          width: player.size - 2,
+          height: player.size - 2
+          }}
+        />
+        <div className='playerMarker' style={{
+          top: player.size, 
+          left: 0,
+          width: player.size - 2,
+          height: player.size - 2
+          }}
+        />
+        <div className='playerTag'
+          style={{}}
+        >
+        P
+        </div>
+      </div>
     )
   }
 }
