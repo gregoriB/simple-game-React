@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { food } from '../helpers/variables';
 import FoodPiece from './FoodPiece';
-import uuid from 'uuid';
-;
+
 class Food extends Component {  
   foodPiece;
   
@@ -13,7 +12,7 @@ class Food extends Component {
         return (
           <FoodPiece
             index={index}
-            key={uuid()}
+            key={food.keys[index]}
             foodX={food.x[index]}
             foodY={food.y[index]}
             foodSize={food.size}
@@ -27,7 +26,7 @@ class Food extends Component {
   //food only updates when one is picked up or reset button is pressed
   shouldComponentUpdate(nextProps) {
     if ((this.props.foodLength !== nextProps.foodLength) ||
-       (this.props.foodKey !== nextProps.foodKey)) {
+       (this.props.resetKey !== nextProps.resetKey)) {
 
       return true;
     }

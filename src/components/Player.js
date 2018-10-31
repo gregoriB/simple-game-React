@@ -22,6 +22,7 @@ class Player extends Component {
               food.color.splice(index, 1);
               food.x.splice(index, 1);
               food.y.splice(index, 1);
+              food.keys.splice(index, 1);
               this.props.updateScore();
               this.setState(() => ({ isPickingUp: true }));
               setTimeout(() => { this.setState(() => ({ isPickingUp: false })) }, 80)

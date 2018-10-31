@@ -1,5 +1,6 @@
 import bgm from '../audio/track1.mp3';
 import sfx from '../audio/explosion.wav';
+import uuid from 'uuid';
 
 export const audio = {
   song: new Audio(bgm),
@@ -15,6 +16,7 @@ export let canMove = {
 
 export let data = {
   countdown: undefined,
+  resetKey: '',  // unique key that tells Food.js to update after a game reset
   timeout: undefined
 }
 
@@ -30,7 +32,7 @@ export const  player = {
 }
 
 export const  food = {
-  key: '',
+  keys: [],
   x: [],
   y: [],
   color: [],
@@ -44,6 +46,7 @@ export const  food = {
       food.x.push(X);
       food.y.push(Y);
       food.color.push(color);
+      food.keys.push(uuid());
     }
   }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './styles/styles.css';
-import { audio, player, food, map, data } from './helpers/variables';
+import { audio, data, food, map, player } from './helpers/variables';
 import Map from './components/Map';
 import UI from './components/UI';
 import uuid from 'uuid';
@@ -41,7 +41,8 @@ class App extends Component {
   handleInitializeVariables = () => {
     player.isReady = false;
     data.gameOver = false;
-    food.key = uuid();
+    data.resetKey = uuid();
+    food.keys = [];
     food.x = [];
     food.y = [];
     audio.song.currentTime = 0;
@@ -121,8 +122,10 @@ class App extends Component {
   
   
   componentDidMount() {
-    const highScore = JSON.parse(localStorage.getItem('highScore'));
-    this.setState(() => ({ highScore: highScore }));               
+    if (localStorage.getItem('highScore')) {
+      const highScore = JSON.parse(localStorage.getItem('highScore'));
+      this.setState(() => ({ highScore: highScore }));
+    }
   }
 
   componentDidUpdate() {

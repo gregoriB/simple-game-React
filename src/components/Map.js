@@ -1,5 +1,5 @@
 import React from 'react';
-import { food, map } from '../helpers/variables';
+import { data, food, map } from '../helpers/variables';
 import Food from './Food';
 import Player from './Player';
 import Timer from './Timer';
@@ -27,7 +27,7 @@ const Map = (props) => {
       <Food 
         //only used to determine whether or not to update in <Food />
         foodLength={food.x.length}
-        foodKey={food.key}
+        resetKey={data.resetKey}
         stage={stage}
       />
       <Timer timer={timer} />
