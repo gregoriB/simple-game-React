@@ -16,6 +16,7 @@ export let canMove = {
 
 export let data = {
   countdown: undefined,
+  isCheating: true,
   resetKey: '',  // unique key that tells Food.js to update after a game reset
   timeout: undefined
 }

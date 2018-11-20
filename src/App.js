@@ -39,13 +39,14 @@ class App extends Component {
   }
 
   handleInitializeVariables = () => {
-    player.isReady = false;
+    audio.song.currentTime = 0;
+    data.isCheating = false;
     data.gameOver = false;
     data.resetKey = uuid();
     food.keys = [];
     food.x = [];
     food.y = [];
-    audio.song.currentTime = 0;
+    player.isReady = false;
   }
 
 
@@ -73,6 +74,9 @@ class App extends Component {
 
   //SCORE STUFF
   handleHighScore = () => {
+    if (data.isCheating) {
+      return
+    }
     if (this.state.score < this.state.highScore) {
       return;
     }
@@ -114,13 +118,15 @@ class App extends Component {
     data.countdown = setInterval(() => { this.setState((prevState) => ({ timer: prevState.timer-1 })) }, 1000);
   }
 
-
-    //called from the function in Player.js to set the movement state
+  //called from the function in Player.js to set the movement state
   handlePlayerMove = (newPlayerPos) => {
     this.setState(() => ({ playerPos: newPlayerPos }));
   }
-  
-  
+
+  handleCheating = () => {
+    this.setState(() => ({ highScore: 'CHEATS' }))
+  }
+
   componentDidMount() {
     if (localStorage.getItem('highScore')) {
       const highScore = JSON.parse(localStorage.getItem('highScore'));
@@ -137,7 +143,7 @@ class App extends Component {
   render() {
 
     const { gameOver, highScore, playerPos, score, stage, timer } = this.state;
-    const { handleNextStage, handleNewGame, handlePlayerMove, handleUpdateScore } = this;
+    const { handleCheating, handleNextStage, handleNewGame, handlePlayerMove, handleUpdateScore } = this;
 
     return (
       <div className='app' style={{ minWidth: map.width }}>
@@ -148,12 +154,13 @@ class App extends Component {
           score={score}
           stage={stage}
         />
-        <Map 
-          timer={timer}
+        <Map
+          cheatMode={handleCheating}
           nextStage={handleNextStage}
           playerMovement={handlePlayerMove}
           playerPos={playerPos}
           stage={stage}
+          timer={timer}
           updateScore={handleUpdateScore}
         />
         <h1>Use the arrow or WASD keys to move</h1>

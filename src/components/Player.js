@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { canMove, food, player, map } from '../helpers/variables';
+import { canMove, data, food, player, map } from '../helpers/variables';
 
 class Player extends Component {
 
@@ -129,14 +129,34 @@ class Player extends Component {
         canMove.down = true;
         clearInterval(player.moveDown);
         break;
+      case 'm':
+        data.isCheating = true;
+        this.props.cheatMode();
+        break;
       default:
         break;
     }
   }
 
+  handleMouseMove = (e) => {
+    const outerDiv = document.getElementsByClassName('map')[0].getBoundingClientRect();
+    const newPlayerPos = [e.clientX - (outerDiv.left + player.size), e.clientY - (outerDiv.top + player.size)];
+    this.props.playerMovement(newPlayerPos);
+  }
+
+  handleMouseDown = () => {
+    if (!data.isCheating) {
+      
+      return;
+    }
+    document.addEventListener('mousemove', this.handleMouseMove);
+  }
+
+  handleMouseUp = () => document.removeEventListener('mousemove', this.handleMouseMove);
+
   componentDidMount() {
-    document.addEventListener('keydown', (e) => this.handleKeydown(e));
-    document.addEventListener('keyup', (e) => this.handleKeyup(e));
+    document.addEventListener('keydown', this.handleKeydown);
+    document.addEventListener('keyup', this.handleKeyup);
   }
 
   componentDidUpdate() {
@@ -146,8 +166,8 @@ class Player extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('keydown', (e) => this.handleKeydown(e));
-    document.removeEventListener('keyup', (e) => this.handleKeyup(e));
+    document.removeEventListener('keydown', this.handleKeydown);
+    document.removeEventListener('keyup', this.handleKeyup);
   }
 
   render() {
@@ -158,6 +178,8 @@ class Player extends Component {
     return (
       <div              
         className='player'
+        onMouseDown={this.handleMouseDown}
+        onMouseUp={this.handleMouseUp}
         style={{
           padding: player.size,
           background: isPickingUp ? '#222' : 'black',

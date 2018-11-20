@@ -6,7 +6,7 @@ import Timer from './Timer';
 
 const Map = (props) => {
 
-  const { nextStage, playerMovement, playerPos, stage, timer, updateScore } = props;
+  const { cheatMode, nextStage, playerMovement, playerPos, stage, timer, updateScore } = props;
 
   return (
     <div
@@ -18,6 +18,7 @@ const Map = (props) => {
         }}
     >
       <Player
+        cheatMode={cheatMode}
         nextStage={nextStage}
         playerMovement={playerMovement}
         playerPos={playerPos}
@@ -25,8 +26,7 @@ const Map = (props) => {
         updateScore={updateScore}
       />
       <Food 
-        //only used to determine whether or not to update in <Food />
-        foodLength={food.x.length}
+        foodLength={food.x.length} //only used to determine whether or not to update in <Food />
         resetKey={data.resetKey}
         stage={stage}
       />
