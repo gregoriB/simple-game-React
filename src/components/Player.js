@@ -130,8 +130,10 @@ class Player extends Component {
         clearInterval(player.moveDown);
         break;
       case 'm':
-        data.isCheating = true;
-        this.props.cheatMode();
+        if (this.props.timer > 0) {
+          data.isCheating = true;
+          this.props.cheatMode();
+        }
         break;
       default:
         break;

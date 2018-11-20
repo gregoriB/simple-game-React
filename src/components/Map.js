@@ -23,6 +23,7 @@ const Map = (props) => {
         playerMovement={playerMovement}
         playerPos={playerPos}
         stage={stage}
+        timer={timer}
         updateScore={updateScore}
       />
       <Food 
