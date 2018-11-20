@@ -154,11 +154,14 @@ class Player extends Component {
     document.addEventListener('mousemove', this.handleMouseMove);
   }
 
-  handleMouseUp = () => document.removeEventListener('mousemove', this.handleMouseMove);
+  handleMouseUp = () => {
+    document.removeEventListener('mousemove', this.handleMouseMove);
+  }
 
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeydown);
     document.addEventListener('keyup', this.handleKeyup);
+    document.addEventListener('mouseup', this.handleMouseUp);
   }
 
   componentDidUpdate() {
@@ -181,7 +184,6 @@ class Player extends Component {
       <div              
         className='player'
         onMouseDown={this.handleMouseDown}
-        onMouseUp={this.handleMouseUp}
         style={{
           padding: player.size,
           background: isPickingUp ? '#222' : 'black',

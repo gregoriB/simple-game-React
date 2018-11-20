@@ -83,9 +83,11 @@ class App extends Component {
 
   handleUpdateHighScore = () => {
     if (data.isCheating) {
+
       return
     }
     if (this.state.score < this.state.highScore) {
+      
       return;
     }
     this.setState(() => ({ highScore: this.state.score }))
