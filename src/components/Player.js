@@ -8,11 +8,11 @@ class Player extends Component {
   }
 
   handlePickUpFood = () => {
-    if (food.x.length === 0) {
+    if (food.x.length === 0 && this.props.timer >= 0) {
       
       return this.props.nextStage();
     }
-    if (player.isReady) {  //prevents the player from picking up food during if is spawns on them during the pre-game countdown.
+    if (player.isReady || data.isCheating) {  //prevents the player from picking up food during if is spawns on them during the pre-game countdown.
       food.x.forEach((item, index) => {
         const pSize = player.size;
         const posX = Math.round(this.props.playerPos[0]-(player.size/2));

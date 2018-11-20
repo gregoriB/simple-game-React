@@ -12,11 +12,12 @@ class Food extends Component {
         return (
           <FoodPiece
             index={index}
-            key={food.keys[index]}
+            color={food.color[index]}
             foodX={food.x[index]}
             foodY={food.y[index]}
             foodSize={food.size}
-            color={food.color[index]}
+            key={food.keys[index]}
+            updateScore={this.props.updateScore}
           />
         )
       });

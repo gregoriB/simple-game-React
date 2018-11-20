@@ -26,7 +26,8 @@ const Map = (props) => {
         timer={timer}
         updateScore={updateScore}
       />
-      <Food 
+      <Food
+        updateScore={updateScore}
         foodLength={food.x.length} //only used to determine whether or not to update in <Food />
         resetKey={data.resetKey}
         stage={stage}

@@ -55,9 +55,11 @@ class App extends Component {
   handleNextStage = () => {
     this.setState((prevState) => ({ stage: prevState.stage + 1 }));
     food.generateFood(this.state.stage*2);
-    this.setState((prevState) => ({ 
-      timer: prevState.timer+Math.ceil(this.state.stage/(1+(this.state.stage*.02)))
-    }));
+    if (player.isReady) {
+      this.setState((prevState) => ({ 
+        timer: prevState.timer+Math.ceil(this.state.stage/(1+(this.state.stage*.02)))
+      }));
+    }
   }
   
   handleGameOver = () => {
@@ -87,7 +89,7 @@ class App extends Component {
       return
     }
     if (this.state.score < this.state.highScore) {
-      
+
       return;
     }
     this.setState(() => ({ highScore: this.state.score }))

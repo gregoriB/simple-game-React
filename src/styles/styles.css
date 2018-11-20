@@ -111,6 +111,8 @@ span {
 .backgroundTimer {
   margin-top: 100px;
   text-shadow: 1px 1px 0px rgba(68, 68, 68, 0.459);
+  pointer-events: none;
+
   z-index: 1;
 }
 
@@ -118,6 +120,7 @@ span {
   color: white;
   margin-top: -37px;
   z-index: 3;
+  pointer-events: none;
 }
 
 div button {
