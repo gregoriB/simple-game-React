@@ -17,8 +17,8 @@ class Player extends Component {
         const pSize = player.size;
         const posX = Math.round(this.props.playerPos[0]-(player.size/2));
         const posY = Math.round(this.props.playerPos[1]-(player.size/2));
-        if ((item >= posX-2 && item <= (posX + (pSize+food.size)*2)) &&
-           (food.y[index] >= posY-2 && food.y[index] <= (posY + (pSize+food.size)*2))) {
+        if ((item >= posX-2 && item <= (posX + (pSize+food.size)*1.8)) &&
+           (food.y[index] >= posY-2 && food.y[index] <= (posY + (pSize+food.size)*1.8))) {
               food.color.splice(index, 1);
               food.x.splice(index, 1);
               food.y.splice(index, 1);

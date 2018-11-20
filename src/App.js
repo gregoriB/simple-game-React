@@ -29,6 +29,7 @@ class App extends Component {
       timer: 3
     }));
     this.handleInitializeVariables();
+    this.handleInitializeHighscore();
     food.generateFood(1);
     audio.song.play();
     this.handleAddAudioLoop();
@@ -67,13 +68,20 @@ class App extends Component {
     audio.explosion.play();
     player.isReady = false;
     this.setState(() => ({ gameOver: true, timer: 'GAME OVER' }));
-    this.handleHighScore();
+    this.handleUpdateHighScore();
     this.handleRemoveAudioLoop();
   }
 
 
   //SCORE STUFF
-  handleHighScore = () => {
+  handleInitializeHighscore = () => {
+    if (localStorage.getItem('highScore')) {
+      const highScore = JSON.parse(localStorage.getItem('highScore'));
+      this.setState(() => ({ highScore: highScore }));
+    }
+  }
+
+  handleUpdateHighScore = () => {
     if (data.isCheating) {
       return
     }
@@ -128,10 +136,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    if (localStorage.getItem('highScore')) {
-      const highScore = JSON.parse(localStorage.getItem('highScore'));
-      this.setState(() => ({ highScore: highScore }));
-    }
+    this.handleInitializeHighscore();
   }
 
   componentDidUpdate() {
