@@ -1,192 +1,34 @@
 import React, { Component } from 'react';
 import './styles/styles.css';
-import { audio, data, food, map, player } from './helpers/variables';
+import { map } from './helpers/variables';
 import Map from './components/Map';
 import UI from './components/UI';
-import uuid from 'uuid';
+import { GameContext } from './contexts/GameContext'
 
 class App extends Component {
 
-  state = {
-    gameOver: true,
-    highScore: 0,
-    laserDisplay: 'none',
-    laserPos: [0,0],
-    playerPos: [100, 240],
-    score: 0,
-    stage: 0,
-    timer: undefined
-  }
-  
-
-  //GAME STATE STUFF
-  handleNewGame = () => {
-    clearInterval(data.countdown);
-    clearTimeout(data.timeout);
-    this.setState(() => ({ 
-      gameOver: false,
-      playerPos: [(map.width/2)-(player.size)-1, (map.height/2)], 
-      score: 0, 
-      stage: 1, 
-      timer: 3
-    }));
-    this.handleInitializeVariables();
-    this.handleInitializeHighscore();
-    food.generateFood(1);
-    audio.song.play();
-    this.handleAddAudioLoop();
-    this.handlePregameCountdown();
-    data.timeout = setTimeout(() => {
-      this.handleStartTimer();
-    }, 2998);
-  }
-
-  handleInitializeVariables = () => {
-    audio.song.currentTime = 0;
-    data.cursor = 'none';
-    data.isCheating = false;
-    data.gameOver = false;
-    data.resetKey = uuid();
-    food.keys = [];
-    food.x = [];
-    food.y = [];
-    player.isReady = false;
-  }
-
-
-  //change this to affect the difficulty
-  handleNextStage = () => {
-    this.setState((prevState) => ({ stage: prevState.stage + 1 }));
-    food.generateFood(this.state.stage*2);
-    if (player.isReady) {
-      this.setState((prevState) => ({ 
-        timer: prevState.timer+Math.ceil(this.state.stage/(1+(this.state.stage*.02)))
-      }));
-    }
-  }
-  
-  handleGameOver = () => {
-    clearInterval(data.countdown)
-    data.gameOver = true;
-    audio.song.pause();
-    audio.song.currentTime = 0;
-    audio.explosion.play();
-    player.isReady = false;
-    this.setState(() => ({ gameOver: true, timer: 'GAME OVER' }));
-    this.handleUpdateHighScore();
-    this.handleRemoveAudioLoop();
-  }
-
-
-  //SCORE STUFF
-  handleInitializeHighscore = () => {
-    if (localStorage.getItem('highScore')) {
-      const highScore = JSON.parse(localStorage.getItem('highScore'));
-      this.setState(() => ({ highScore: highScore }));
-    }
-  }
-
-  handleUpdateHighScore = () => {
-    if (data.isCheating) {
-
-      return
-    }
-    if (this.state.score < this.state.highScore) {
-
-      return;
-    }
-    this.setState(() => ({ highScore: this.state.score }))
-    const highScore = JSON.stringify(this.state.score);
-    localStorage.setItem('highScore', highScore);
-  }
-
-  handleUpdateScore = () => {
-    this.setState((prevState) => ({ score: prevState.score + 1250 }));
-  }
-
-
-  //AUDIO STUFF
-  handleAddAudioLoop = () => {
-    audio.song.addEventListener('ended', () => {
-      audio.song.currentTime = 0;
-      audio.song.play();
-    }, false);
-  }
-
-  handleRemoveAudioLoop = () => {
-    audio.song.removeEventListener('ended', () => {
-      audio.song.currentTime = 0;
-      audio.song.play();
-    }, false);
-  }
-  
-
-  //TIMER STUFF
-  handleStartTimer = () => {
-    player.isReady = true;
-    clearInterval(data.countdown);
-    this.setState(() => ({ timer: 20, score: 0 }));
-    data.countdown = setInterval(() => { this.setState((prevState) => ({ timer: prevState.timer-1 })) }, 1000);
-  }
-  
-  handlePregameCountdown = () => {
-    data.countdown = setInterval(() => { this.setState((prevState) => ({ timer: prevState.timer-1 })) }, 1000);
-  }
-
-  //called from the function in Player.js to set the movement state
-  handlePlayerMove = (newPlayerPos) => {
-    this.setState(() => ({ playerPos: newPlayerPos }));
-  }
-
-  //press 'm' to enter cheat mode.  Handled in Player.js.
-  handleCheating = () => {
-    data.cursor = 'crosshair';
-    data.isCheating = true;
-    audio.explosion.play();
-    this.setState(() => ({ highScore: 'CHEATS' }))
-  }
-
-  handleUpdateLaser = (newLaserPos) => {
-    this.setState(() => ({ laserPos: newLaserPos, laserDisplay: 'inline-block' }));
-    setTimeout(() => {this.setState(() => ({ laserDisplay: 'none' }))}, 80);
-  }
-
   componentDidMount() {
-    this.handleInitializeHighscore();
+    this.props.handleInitializeHighscore();
   }
 
   componentDidUpdate() {
-    if (this.state.timer === 0) {
-      this.handleGameOver();
+    if (this.props.timer === 0) {
+      this.props.handleGameOver();
     }
   }
 
   render() {
-
-    const { gameOver, highScore, playerPos, score, stage, timer } = this.state;
-    const { handleCheating, handleNextStage, handleNewGame, handlePlayerMove, handleUpdateLaser, handleUpdateScore } = this;
-
+    
     return (
       <div className='app' style={{ minWidth: map.width }}>
-        <UI 
-          gameOver={gameOver}
-          highScore={highScore}
-          newGame={handleNewGame}
-          score={score}
-          stage={stage}
-        />
-        <Map
-          cheatMode={handleCheating}
-          laserDisplay={this.state.laserDisplay}
-          laserPos={this.state.laserPos}
-          nextStage={handleNextStage}
-          playerMovement={handlePlayerMove}
-          playerPos={playerPos}
-          stage={stage}
-          timer={timer}
-          updateLaser={handleUpdateLaser}
-          updateScore={handleUpdateScore}
-        />
+        <GameContext.Consumer>
+        {(context) => (
+          <>
+            <UI {...context} />
+          </>
+        )}
+        </GameContext.Consumer>
+        <Map />
         <h1 className='help'>Use the arrow or WASD keys to <span className='secret'>m</span>ove</h1>
       </div>
     );

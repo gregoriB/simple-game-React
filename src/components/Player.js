@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { data, food, player, map } from '../helpers/variables';
+import { GameContext } from '../contexts/GameContext'
+
 
 class Player extends Component {
 
@@ -8,11 +10,11 @@ class Player extends Component {
   }
 
   handlePickUpFood = () => {
-    if (food.x.length === 0 && this.props.timer >= 0) {
+    if (food.x.length === 0 && this.props.timer > 0) {
       
-      return this.props.nextStage();
+      return this.props.handleNextStage();
     }
-    if (player.isReady || data.isCheating) {  //prevents the player from picking up food during if is spawns on them during the pre-game countdown.
+    if (player.isReady || data.isCheating) {  //prevents the player from picking up food if it spawns on them during the pre-game countdown.
       food.x.forEach((item, index) => {
         const pSize = player.size;
         const posX = Math.round(this.props.playerPos[0]-(player.size/2));
@@ -23,9 +25,9 @@ class Player extends Component {
               food.x.splice(index, 1);
               food.y.splice(index, 1);
               food.keys.splice(index, 1);
-              this.props.updateScore();
+              this.props.handleUpdateScore();
               this.setState(() => ({ isPickingUp: true }));
-              setTimeout(() => { this.setState(() => ({ isPickingUp: false })) }, 80)
+              setTimeout(() => { this.setState(() => ({ isPickingUp: false })) }, 80);
           }
       });
     }
@@ -34,12 +36,12 @@ class Player extends Component {
   handlePlayerMove = (index, value) => {
     const newPlayerPos = [...this.props.playerPos]; 
     const boundary = index === 0 ? map.width-player.size : map.height-player.size;
-    newPlayerPos.splice(index, 1, newPlayerPos[index] + value)
+    newPlayerPos.splice(index, 1, newPlayerPos[index] + value);
     if (newPlayerPos[index] < 0 || newPlayerPos[index] > boundary - player.size){
       
       return;
     }
-    this.props.playerMovement(newPlayerPos);
+    this.props.handlePlayerMove(newPlayerPos);
   }
 
    // using intervals for continous movement as a workaround to avoid key repeat from the operating system.
@@ -52,7 +54,7 @@ class Player extends Component {
         if (player.canMove.left) {
           player.willMove.left = (
             setInterval(() => {this.handlePlayerMove(0, -player.stride)}, player.speed) 
-          )
+          );
           player.canMove.left = false;
         }
         break;
@@ -61,7 +63,7 @@ class Player extends Component {
         if (player.canMove.up) {
           player.willMove.up = (
             setInterval(() => {this.handlePlayerMove(1, -player.stride)}, player.speed)
-          )
+          );
           player.canMove.up = false;
         }
         break;
@@ -70,7 +72,7 @@ class Player extends Component {
         if (player.canMove.right) {
           player.willMove.right = (
             setInterval(() => {this.handlePlayerMove(0, player.stride)}, player.speed)
-          )
+          );
           player.canMove.right = false;
         }
         break;
@@ -79,7 +81,7 @@ class Player extends Component {
         if (player.canMove.down) {
           player.willMove.down = (
             setInterval(() => {this.handlePlayerMove(1, player.stride)}, player.speed)
-          )
+          );
           player.canMove.down = false;
         }
         break;
@@ -131,7 +133,7 @@ class Player extends Component {
         break;
       case 'm':
         if (this.props.timer && !data.isCheating) {
-          this.props.cheatMode();
+          this.props.handleActivateCheats();
         }
         break;
       default:
@@ -147,7 +149,7 @@ class Player extends Component {
 
       return;
     }
-    this.props.playerMovement(newPlayerPos);
+    this.props.handlePlayerMove(newPlayerPos);
   }
 
   handleMouseDown = () => {
@@ -172,10 +174,6 @@ class Player extends Component {
   }
 
   componentDidUpdate() {
-    if (!this.props.stage) {
-
-      return;
-    }
     this.handlePickUpFood();
   }
 
@@ -187,21 +185,29 @@ class Player extends Component {
   render() {
 
     const { isPickingUp } = this.state;
-    const { playerPos } = this.props;
 
     return (
-      <div              
-        className='player'
-        onMouseDown={this.handleMouseDown}
-        style={{
-          background: isPickingUp ? '#222' : 'black',
-          transform: isPickingUp ? 'scale(1.2)' : null,
-          padding: player.size,
-          position: 'absolute',
-          left: playerPos[0],
-          top: playerPos[1]
-        }}
-      />
+      <>
+        <GameContext.Consumer>
+          {(context) => (
+            <>
+               <div              
+                className='player'
+                onMouseDown={this.handleMouseDown}
+                style={{
+                  background: isPickingUp ? '#222' : 'black',
+                  transform: isPickingUp ? 'scale(1.2)' : null,
+                  padding: player.size,
+                  position: 'absolute',
+                  left: context.playerPos[0],
+                  top: context.playerPos[1]
+                }}
+              />
+            </>
+           )
+          }
+        </GameContext.Consumer>
+      </>
     )
   }
 }

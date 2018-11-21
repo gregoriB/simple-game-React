@@ -49,7 +49,7 @@ export const  food = {
     for (let i = 0; i < num; i++) {
       const X = ~~(Math.random()*(map.width-(food.size*2)));
       const Y = ~~(Math.random()*(map.height-(food.size*2)));
-      const color = `rgb(${~~(Math.random()*105)+150}, ${~~(Math.random()*80)}, ${~~(Math.random()*32)}`
+      const color = `rgb(${~~(Math.random()*105)+150}, ${~~(Math.random()*80)}, ${~~(Math.random()*32)}`;
       food.x.push(X);
       food.y.push(Y);
       food.color.push(color);

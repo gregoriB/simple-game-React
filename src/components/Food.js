@@ -4,6 +4,8 @@ import FoodPiece from './FoodPiece';
 
 class Food extends Component {  
   foodPiece;
+  foodLength;
+  resetKey;
   
   handlePopulateFood = () => {
     if (food.x.length >= 0) {
@@ -17,7 +19,7 @@ class Food extends Component {
             foodY={food.y[index]}
             foodSize={food.size}
             key={food.keys[index]}
-            updateScore={this.props.updateScore}
+            updateScore={this.props.handleUpdateScore}
           />
         )
       });
@@ -25,9 +27,9 @@ class Food extends Component {
   }
   
   //food only updates when one is picked up or reset button is pressed
-  shouldComponentUpdate(nextProps) {
-    if ((this.props.foodLength !== nextProps.foodLength) ||
-       (this.props.resetKey !== nextProps.resetKey)) {
+  shouldComponentUpdate() {
+    if ((this.foodLength !== food.x.length) ||
+       (this.resetKey !== food.resetKey)) {
 
       return true;
     }
@@ -37,6 +39,8 @@ class Food extends Component {
 
   componentWillUpdate() {
     this.handlePopulateFood();
+    this.foodLength = food.x.length;
+    this.resetKey = food.resetKey;
   }
 
   render() {

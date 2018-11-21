@@ -20,7 +20,7 @@ class UI extends Component {
       audio.shoot.volume = .03;
     }
     const isMuted = !this.state.isMuted;
-    this.setState((prevState) => ({ isMuted: !prevState.isMuted }))
+    this.setState((prevState) => ({ isMuted: !prevState.isMuted }));
     localStorage.setItem('isMuted', JSON.stringify(isMuted));
   }
 
@@ -55,7 +55,7 @@ class UI extends Component {
 
   render() {
 
-    const { gameOver, highScore, newGame, score, stage } = this.props;
+    const { gameOver, highScore, handleNewGame, score, stage } = this.props;
     const { isMuted } = this.state;
     const { handleToggleVolume } = this;
 
@@ -65,7 +65,7 @@ class UI extends Component {
           <p className='stageCounter'>Stage: <span className='uiNumbers'>{stage}</span></p>
           <button 
             className='startButton' 
-            onClick={newGame}
+            onClick={handleNewGame}
             >
             {gameOver ? 'START' : 'RESET'}
           </button>

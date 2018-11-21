@@ -8,7 +8,7 @@ class Timer extends Component {
 
       return false;
     } 
-
+    
     return true;
   }
 
