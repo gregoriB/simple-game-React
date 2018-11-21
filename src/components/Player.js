@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { canMove, data, food, player, map } from '../helpers/variables';
+import { data, food, player, map } from '../helpers/variables';
 
 class Player extends Component {
 
@@ -32,7 +32,7 @@ class Player extends Component {
   }
 
   handlePlayerMove = (index, value) => {
-    const newPlayerPos = [...this.props.playerPos];
+    const newPlayerPos = [...this.props.playerPos]; 
     const boundary = index === 0 ? map.width-player.size : map.height-player.size;
     newPlayerPos.splice(index, 1, newPlayerPos[index] + value)
     if (newPlayerPos[index] < 0 || newPlayerPos[index] > boundary - player.size){
@@ -49,38 +49,38 @@ class Player extends Component {
     switch(e.key) {
       case 'ArrowLeft':
       case 'a':
-        if (canMove.left) {
-          player.moveLeft = (
+        if (player.canMove.left) {
+          player.willMove.left = (
             setInterval(() => {this.handlePlayerMove(0, -player.stride)}, player.speed) 
           )
-          canMove.left = false;
+          player.canMove.left = false;
         }
         break;
       case 'ArrowUp':
       case 'w':
-        if (canMove.up) {
-          player.moveUp = (
+        if (player.canMove.up) {
+          player.willMove.up = (
             setInterval(() => {this.handlePlayerMove(1, -player.stride)}, player.speed)
           )
-          canMove.up = false;
+          player.canMove.up = false;
         }
         break;
       case 'ArrowRight':
       case 'd':
-        if (canMove.right) {
-          player.moveRight = (
+        if (player.canMove.right) {
+          player.willMove.right = (
             setInterval(() => {this.handlePlayerMove(0, player.stride)}, player.speed)
           )
-          canMove.right = false;
+          player.canMove.right = false;
         }
         break;
       case 'ArrowDown':
       case 's':
-        if (canMove.down) {
-          player.moveDown = (
+        if (player.canMove.down) {
+          player.willMove.down = (
             setInterval(() => {this.handlePlayerMove(1, player.stride)}, player.speed)
           )
-          canMove.down = false;
+          player.canMove.down = false;
         }
         break;
       default:
@@ -99,10 +99,10 @@ class Player extends Component {
   }
   
   handleClearMovement = () => {
-    clearInterval(player.moveRight);
-    clearInterval(player.moveLeft);
-    clearInterval(player.moveUp);
-    clearInterval(player.moveDown);
+    clearInterval(player.willMove.right);
+    clearInterval(player.willMove.left);
+    clearInterval(player.willMove.up);
+    clearInterval(player.willMove.down);
   }
 
    //removes the interval set to a key to stop movement and allows the key input to register again.
@@ -111,27 +111,26 @@ class Player extends Component {
     switch(e.key) {
       case 'ArrowRight':
       case 'd':
-        canMove.right = true;
-        clearInterval(player.moveRight);
+        player.canMove.right = true;
+        clearInterval(player.willMove.right);
         break
       case 'ArrowLeft':
       case 'a':
-        canMove.left = true;
-        clearInterval(player.moveLeft);
+        player.canMove.left = true;
+        clearInterval(player.willMove.left);
         break;
       case 'ArrowUp':
       case 'w':
-        canMove.up = true;
-        clearInterval(player.moveUp);
+        player.canMove.up = true;
+        clearInterval(player.willMove.up);
         break;
       case 'ArrowDown':
       case 's':
-        canMove.down = true;
-        clearInterval(player.moveDown);
+        player.canMove.down = true;
+        clearInterval(player.willMove.down);
         break;
       case 'm':
-        if (this.props.timer) {
-          data.isCheating = true;
+        if (this.props.timer && !data.isCheating) {
           this.props.cheatMode();
         }
         break;
@@ -143,6 +142,11 @@ class Player extends Component {
   handleMouseMove = (e) => {
     const outerDiv = document.getElementsByClassName('map')[0].getBoundingClientRect();
     const newPlayerPos = [e.clientX - (outerDiv.left + player.size), e.clientY - (outerDiv.top + player.size)];
+    if ((e.clientX < outerDiv.left || e.clientX > outerDiv.right) || 
+        (e.clientY < outerDiv.top || e.clientY > outerDiv.bottom)) {
+
+      return;
+    }
     this.props.playerMovement(newPlayerPos);
   }
 
@@ -151,11 +155,14 @@ class Player extends Component {
       
       return;
     }
+    data.friendlyFire = true;
+    setTimeout(() => { data.friendlyFire = false}, 1);
     document.addEventListener('mousemove', this.handleMouseMove);
   }
 
   handleMouseUp = () => {
     document.removeEventListener('mousemove', this.handleMouseMove);
+    data.mouseMove = false;
   }
 
   componentDidMount() {
@@ -165,9 +172,11 @@ class Player extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.stage) {
-      this.handlePickUpFood();
+    if (!this.props.stage) {
+
+      return;
     }
+    this.handlePickUpFood();
   }
 
   componentWillUnmount() {
@@ -185,9 +194,9 @@ class Player extends Component {
         className='player'
         onMouseDown={this.handleMouseDown}
         style={{
-          padding: player.size,
           background: isPickingUp ? '#222' : 'black',
           transform: isPickingUp ? 'scale(1.2)' : null,
+          padding: player.size,
           position: 'absolute',
           left: playerPos[0],
           top: playerPos[1]

@@ -11,10 +11,13 @@ class UI extends Component {
     if (!this.state.isMuted) {
       audio.song.volume = 0;
       audio.explosion.volume = 0;
+      audio.shoot.volume = 0;
+
     } 
     if (this.state.isMuted) {
       audio.song.volume = .3;
       audio.explosion.volume = .07;
+      audio.shoot.volume = .03;
     }
     const isMuted = !this.state.isMuted;
     this.setState((prevState) => ({ isMuted: !prevState.isMuted }))
@@ -25,11 +28,14 @@ class UI extends Component {
     if (isMuted) {
       audio.song.volume = 0;
       audio.explosion.volume = 0;
+      audio.shoot.volume = 0;
 
       return;
     }
     audio.song.volume = .3;
     audio.explosion.volume = .07;
+    audio.shoot.volume = .04;
+
   }
   
   shouldComponentUpdate(nextProps, nextState) {
@@ -56,7 +62,7 @@ class UI extends Component {
     return (
       <>
         <div className='uiBar'>
-          <p className='stageCounter'>Stage: <span>{stage}</span></p>
+          <p className='stageCounter'>Stage: <span className='uiNumbers'>{stage}</span></p>
           <button 
             className='startButton' 
             onClick={newGame}
@@ -71,8 +77,8 @@ class UI extends Component {
             {isMuted ? 'UNMUTE' : 'MUTE'}
           </button>
           </div>
-          <p className='score'>Score: <span>{score}</span></p>
-          <p className='highScore'>Hi-Score: <span>{highScore}</span></p>
+          <p className='score'>Score: <span className='uiNumbers'>{score}</span></p>
+          <p className='highScore'>Hi-Score: <span className='uiNumbers'>{highScore}</span></p>
         </div>
       </>
     )

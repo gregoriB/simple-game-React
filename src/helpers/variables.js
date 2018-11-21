@@ -1,35 +1,41 @@
 import bgm from '../audio/track1.mp3';
-import sfx from '../audio/explosion.wav';
+import explosion from '../audio/explosion.wav';
+import laser from '../audio/shoot.wav'
 import uuid from 'uuid';
 
 export const audio = {
   song: new Audio(bgm),
-  explosion: new Audio(sfx)
-}
-
-export let canMove = {
-  left: true,
-  right: true,
-  up: true,
-  down: true
+  explosion: new Audio(explosion),
+  shoot: new Audio(laser)
 }
 
 export let data = {
   countdown: undefined,
+  cursor: 'default',
   isCheating: true,
+  friendlyFire: false, // only true when player is clicked
+  mouseMove: false,
   resetKey: '',  // unique key that tells Food.js to update after a game reset
   timeout: undefined
 }
 
 export const  player = {
+  canMove: {
+    left: true,
+    right: true,
+    up: true,
+    down: true
+  },
   isReady: true,
-  moveleft: '',
-  moveRight: '',
-  moveUp: '',
-  moveDown: '',
   size: 12,
   speed: 10, // larger is slower, 10 is the fastest.
-  stride: 4 // how far the player moves with each move input. Also affects the movement speed.
+  stride: 4, // how far the player moves with each move input. Also affects the movement speed.
+  willMove: {
+    left: '',
+    right: '',
+    up: '',
+    down: ''
+  }
 }
 
 export const  food = {

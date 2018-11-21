@@ -1,6 +1,7 @@
 * {
-  user-select: none;
   -moz-user-select: none;
+  overflow: hidden;
+  user-select: none;
 }
 
 body {
@@ -15,6 +16,7 @@ button {
   background: rgba(255, 32, 32, 0.76);
   border: none;
   color: rgba(255, 255, 255, 0.774);
+  cursor: pointer;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: bold;
   letter-spacing: 2px;
@@ -23,20 +25,18 @@ button {
   width: 4rem;
 }
 
-h1 {
-  margin-top: 57%;
-  width: 100%;
-}
-
 p {
   font-size: 1.1rem;
   margin: 0;
 }
 
-span {
-  font-size: 1.3rem;
-  font-weight: bold;
-  letter-spacing: 4px;
+div button {
+  font-size: .8rem;
+  height: 25px;
+  margin: auto;
+  margin-left: 0;
+  padding: 0;
+  width: 5rem;
 }
 
 .app {
@@ -80,6 +80,31 @@ span {
   padding: 1rem;
 }
 
+.uiNumbers {
+  font-size: 1.3rem;
+  font-weight: bold;
+  letter-spacing: 4px;
+}
+
+.help {
+  font-weight: 700;
+  font-size: 2.5rem;
+  margin-top: 57%;
+  width: 100%;
+}
+
+.secret:hover {
+  color: rgb(82, 82, 82);
+  transition: .2s;
+}
+
+.laser {
+  background: rgb(253, 255, 113);
+  border-radius: 50%;
+  padding: 4px;
+  position: absolute;
+}
+
 .stageCounter {
   justify-self: left;
   margin-left: 2rem;
@@ -112,7 +137,6 @@ span {
   margin-top: 100px;
   text-shadow: 1px 1px 0px rgba(68, 68, 68, 0.459);
   pointer-events: none;
-
   z-index: 1;
 }
 
@@ -121,15 +145,6 @@ span {
   margin-top: -37px;
   z-index: 3;
   pointer-events: none;
-}
-
-div button {
-  font-size: .8rem;
-  height: 25px;
-  margin: auto;
-  margin-left: 0;
-  padding: 0;
-  width: 5rem;
 }
 
 .notMuted {

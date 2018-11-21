@@ -10,6 +10,8 @@ class App extends Component {
   state = {
     gameOver: true,
     highScore: 0,
+    laserDisplay: 'none',
+    laserPos: [0,0],
     playerPos: [100, 240],
     score: 0,
     stage: 0,
@@ -41,6 +43,7 @@ class App extends Component {
 
   handleInitializeVariables = () => {
     audio.song.currentTime = 0;
+    data.cursor = 'none';
     data.isCheating = false;
     data.gameOver = false;
     data.resetKey = uuid();
@@ -135,8 +138,17 @@ class App extends Component {
     this.setState(() => ({ playerPos: newPlayerPos }));
   }
 
+  //press 'm' to enter cheat mode.  Handled in Player.js.
   handleCheating = () => {
+    data.cursor = 'crosshair';
+    data.isCheating = true;
+    audio.explosion.play();
     this.setState(() => ({ highScore: 'CHEATS' }))
+  }
+
+  handleUpdateLaser = (newLaserPos) => {
+    this.setState(() => ({ laserPos: newLaserPos, laserDisplay: 'inline-block' }));
+    setTimeout(() => {this.setState(() => ({ laserDisplay: 'none' }))}, 80);
   }
 
   componentDidMount() {
@@ -152,7 +164,7 @@ class App extends Component {
   render() {
 
     const { gameOver, highScore, playerPos, score, stage, timer } = this.state;
-    const { handleCheating, handleNextStage, handleNewGame, handlePlayerMove, handleUpdateScore } = this;
+    const { handleCheating, handleNextStage, handleNewGame, handlePlayerMove, handleUpdateLaser, handleUpdateScore } = this;
 
     return (
       <div className='app' style={{ minWidth: map.width }}>
@@ -165,14 +177,17 @@ class App extends Component {
         />
         <Map
           cheatMode={handleCheating}
+          laserDisplay={this.state.laserDisplay}
+          laserPos={this.state.laserPos}
           nextStage={handleNextStage}
           playerMovement={handlePlayerMove}
           playerPos={playerPos}
           stage={stage}
           timer={timer}
+          updateLaser={handleUpdateLaser}
           updateScore={handleUpdateScore}
         />
-        <h1>Use the arrow or WASD keys to move</h1>
+        <h1 className='help'>Use the arrow or WASD keys to <span className='secret'>m</span>ove</h1>
       </div>
     );
   }
