@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import { GameProvider, GameContext } from './contexts/GameContext'
+import { GameProvider } from './contexts/GameContext'
 
 ReactDOM.render(
   <GameProvider>
-    <GameContext.Consumer>{(context) => <App {...context} />}</GameContext.Consumer>
+    <App />
   </GameProvider>, 
   document.getElementById('root')
 );

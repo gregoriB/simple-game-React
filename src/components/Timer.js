@@ -12,6 +12,12 @@ class Timer extends Component {
     return true;
   }
 
+  componentDidUpdate() {
+    if (this.props.timer === 0) {
+      this.props.handleGameOver();
+    }
+  }
+
   render() {
     
     const { timer } = this.props;

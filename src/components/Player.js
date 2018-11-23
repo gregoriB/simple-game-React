@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { data, food, player, map } from '../helpers/variables';
-import { GameContext } from '../contexts/GameContext'
-
 
 class Player extends Component {
 
@@ -185,28 +183,23 @@ class Player extends Component {
   render() {
 
     const { isPickingUp } = this.state;
+    const { playerPos } = this.props;
+    const { handleMouseDown } = this;
 
     return (
       <>
-        <GameContext.Consumer>
-          {(context) => (
-            <>
-               <div              
-                className='player'
-                onMouseDown={this.handleMouseDown}
-                style={{
-                  background: isPickingUp ? '#222' : 'black',
-                  transform: isPickingUp ? 'scale(1.2)' : null,
-                  padding: player.size,
-                  position: 'absolute',
-                  left: context.playerPos[0],
-                  top: context.playerPos[1]
-                }}
-              />
-            </>
-           )
-          }
-        </GameContext.Consumer>
+        <div              
+          className='player'
+          onMouseDown={handleMouseDown}
+          style={{
+            background: isPickingUp ? '#222' : 'black',
+            transform: isPickingUp ? 'scale(1.2)' : null,
+            padding: player.size,
+            position: 'absolute',
+            left: playerPos[0],
+            top: playerPos[1]
+          }}
+        />
       </>
     )
   }

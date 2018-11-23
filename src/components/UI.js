@@ -48,6 +48,7 @@ class UI extends Component {
   }
 
   componentDidMount() {
+    this.props.handleInitializeHighscore();
     let isMuted = JSON.parse(localStorage.getItem('isMuted'));
     this.setState(() => ({ isMuted: isMuted }));
     this.handleSetInitialState(isMuted);
