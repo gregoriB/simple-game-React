@@ -3,29 +3,25 @@ import { data, food, player, map } from '../helpers/variables';
 
 class Player extends Component {
 
-  state = {
-    isPickingUp: false
-  }
+  state = { isPickingUp: false }
 
   handlePickUpFood = () => {
-    if (food.x.length === 0 && this.props.timer > 0) {
-      
-      return this.props.handleNextStage();
-    }
+    if (food.x.length === 0 && this.props.timer > 0) return this.props.handleNextStage();
+
     if (player.isReady || data.isCheating) {  //prevents the player from picking up food if it spawns on them during the pre-game countdown.
       food.x.forEach((item, index) => {
-        const pSize = player.size;
-        const posX = Math.round(this.props.playerPos[0]-(player.size/2));
-        const posY = Math.round(this.props.playerPos[1]-(player.size/2));
-        if ((item >= posX-2 && item <= (posX + (pSize+food.size)*1.8)) &&
-           (food.y[index] >= posY-2 && food.y[index] <= (posY + (pSize+food.size)*1.8))) {
+        const pSize = player.size,
+              posX  = Math.round(this.props.playerPos[0] - (player.size / 2)),
+              posY  = Math.round(this.props.playerPos[1] - (player.size / 2));
+        if ((item >= posX - 2 && item <= (posX + (pSize + food.size) * 1.8)) &&
+           (food.y[index] >= posY-2 && food.y[index] <= (posY + (pSize + food.size) * 1.8))) {
               food.color.splice(index, 1);
               food.x.splice(index, 1);
               food.y.splice(index, 1);
               food.keys.splice(index, 1);
               this.props.handleUpdateScore();
-              this.setState(() => ({ isPickingUp: true }));
-              setTimeout(() => { this.setState(() => ({ isPickingUp: false })) }, 80);
+              this.setState({ isPickingUp: true });
+              setTimeout(() => this.setState({ isPickingUp: false }), 80);
           }
       });
     }
@@ -35,51 +31,41 @@ class Player extends Component {
     const newPlayerPos = [...this.props.playerPos]; 
     const boundary = index === 0 ? map.width-player.size : map.height-player.size;
     newPlayerPos.splice(index, 1, newPlayerPos[index] + value);
-    if (newPlayerPos[index] < 0 || newPlayerPos[index] > boundary - player.size){
-      
-      return;
-    }
+    if (newPlayerPos[index] < 0 || newPlayerPos[index] > boundary - player.size) return;
+
     this.props.handlePlayerMove(newPlayerPos);
   }
 
    // using intervals for continous movement as a workaround to avoid key repeat from the operating system.
    // only the first keypress is registered and the interval continues until the key registers a 'keyup'.
-  handleDirections = (e) => {
+  handleDirections = e => {
     e.preventDefault();
     switch(e.key) {
       case 'ArrowLeft':
       case 'a':
         if (player.canMove.left) {
-          player.willMove.left = (
-            setInterval(() => {this.handlePlayerMove(0, -player.stride)}, player.speed) 
-          );
+          player.willMove.left = setInterval(() => this.handlePlayerMove(0, -player.stride), player.speed);
           player.canMove.left = false;
         }
         break;
       case 'ArrowUp':
       case 'w':
         if (player.canMove.up) {
-          player.willMove.up = (
-            setInterval(() => {this.handlePlayerMove(1, -player.stride)}, player.speed)
-          );
+          player.willMove.up = setInterval(() => this.handlePlayerMove(1, -player.stride), player.speed);
           player.canMove.up = false;
         }
         break;
       case 'ArrowRight':
       case 'd':
         if (player.canMove.right) {
-          player.willMove.right = (
-            setInterval(() => {this.handlePlayerMove(0, player.stride)}, player.speed)
-          );
+          player.willMove.right = setInterval(() => this.handlePlayerMove(0, player.stride), player.speed);
           player.canMove.right = false;
         }
         break;
       case 'ArrowDown':
       case 's':
         if (player.canMove.down) {
-          player.willMove.down = (
-            setInterval(() => {this.handlePlayerMove(1, player.stride)}, player.speed)
-          );
+          player.willMove.down = setInterval(() => this.handlePlayerMove(1, player.stride), player.speed);
           player.canMove.down = false;
         }
         break;
@@ -88,13 +74,10 @@ class Player extends Component {
     }
   }
   
-  handleKeydown = (e) => {
+  handleKeydown = e => {
     e.preventDefault();
-    if (!player.isReady) {
-      this.handleClearMovement();
+    if (!player.isReady) return this.handleClearMovement();
 
-      return;
-    }
     this.handleDirections(e);
   }
   
@@ -106,7 +89,7 @@ class Player extends Component {
   }
 
    //removes the interval set to a key to stop movement and allows the key input to register again.
-  handleKeyup = (e) => {
+  handleKeyup = e => {
     e.preventDefault();
     switch(e.key) {
       case 'ArrowRight':
@@ -139,24 +122,19 @@ class Player extends Component {
     }
   }
 
-  handleMouseMove = (e) => {
+  handleMouseMove = e => {
     const outerDiv = document.getElementsByClassName('map')[0].getBoundingClientRect();
     const newPlayerPos = [e.clientX - (outerDiv.left + player.size), e.clientY - (outerDiv.top + player.size)];
-    if ((e.clientX < outerDiv.left || e.clientX > outerDiv.right) || 
-        (e.clientY < outerDiv.top || e.clientY > outerDiv.bottom)) {
+    if (e.clientX < outerDiv.left || e.clientX > outerDiv.right || e.clientY < outerDiv.top || e.clientY > outerDiv.bottom) return;
 
-      return;
-    }
     this.props.handlePlayerMove(newPlayerPos);
   }
 
   handleMouseDown = () => {
-    if (!data.isCheating) {
-      
-      return;
-    }
+    if (!data.isCheating) return;
+
     data.friendlyFire = true;
-    setTimeout(() => { data.friendlyFire = false}, 1);
+    setTimeout(() => data.friendlyFire = false, 1);
     document.addEventListener('mousemove', this.handleMouseMove);
   }
 
@@ -171,9 +149,7 @@ class Player extends Component {
     document.addEventListener('mouseup', this.handleMouseUp);
   }
 
-  componentDidUpdate() {
-    this.handlePickUpFood();
-  }
+  componentDidUpdate() { this.handlePickUpFood() };
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeydown);
@@ -182,9 +158,9 @@ class Player extends Component {
 
   render() {
 
-    const { isPickingUp } = this.state;
-    const { playerPos } = this.props;
-    const { handleMouseDown } = this;
+    const { isPickingUp } = this.state,
+          { playerPos } = this.props,
+          { handleMouseDown } = this;
 
     return (
       <>

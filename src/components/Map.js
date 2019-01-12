@@ -15,7 +15,7 @@ const Map = () => {
         <>
           <div
             className='map'
-            onMouseDown={(e) => context.handleShootLaser(e)}
+            onMouseDown={e => context.handleShootLaser(e)}
             style={{
               cursor: data.cursor,
               position: 'absolute',

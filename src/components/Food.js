@@ -28,11 +28,7 @@ class Food extends Component {
   
   //food only updates when one is picked up or reset button is pressed
   shouldComponentUpdate() {
-    if ((this.foodLength !== food.x.length) ||
-       (this.resetKey !== food.resetKey)) {
-
-      return true;
-    }
+    if (this.foodLength !== food.x.length || this.resetKey !== food.resetKey) return true;
 
     return false;
   }
@@ -52,5 +48,5 @@ class Food extends Component {
     )
   }
 }
-export default Food;
 
+export default Food;

@@ -3,9 +3,7 @@ import { audio } from '../helpers/variables';
 
 class UI extends Component {
 
-  state = {
-    isMuted: false
-  }
+  state = { isMuted: false }
 
   handleToggleVolume = () => {
     if (!this.state.isMuted) {
@@ -20,45 +18,42 @@ class UI extends Component {
       audio.shoot.volume = .03;
     }
     const isMuted = !this.state.isMuted;
-    this.setState((prevState) => ({ isMuted: !prevState.isMuted }));
+    this.setState(prevState => ({ isMuted: !prevState.isMuted }));
     localStorage.setItem('isMuted', JSON.stringify(isMuted));
   }
 
   handleSetInitialState = (isMuted) => {
     if (isMuted) {
-      audio.song.volume = 0;
-      audio.explosion.volume = 0;
-      audio.shoot.volume = 0;
-
-      return;
+      return (
+        audio.song.volume = 0,
+        audio.explosion.volume = 0,
+        audio.shoot.volume = 0
+      )
     }
+
     audio.song.volume = .3;
     audio.explosion.volume = .07;
     audio.shoot.volume = .04;
-
   }
   
   shouldComponentUpdate(nextProps, nextState) {
-    if ((JSON.stringify(nextProps) !== JSON.stringify(this.props)) ||
-       ( this.state.isMuted !== nextState.isMuted)) {
-          return true;
-       }
+    if (JSON.stringify(nextProps) !== JSON.stringify(this.props) || this.state.isMuted !== nextState.isMuted) return true;
 
-   return false;
+    return false;
   }
 
   componentDidMount() {
     this.props.handleInitializeHighscore();
     let isMuted = JSON.parse(localStorage.getItem('isMuted'));
-    this.setState(() => ({ isMuted: isMuted }));
+    this.setState({ isMuted: isMuted });
     this.handleSetInitialState(isMuted);
   }
 
   render() {
 
-    const { gameOver, highScore, handleNewGame, score, stage } = this.props;
-    const { isMuted } = this.state;
-    const { handleToggleVolume } = this;
+    const { gameOver, highScore, handleNewGame, score, stage } = this.props,
+          { isMuted } = this.state,
+          { handleToggleVolume } = this;
 
     return (
       <>
@@ -67,7 +62,7 @@ class UI extends Component {
           <button 
             className='startButton' 
             onClick={handleNewGame}
-            >
+          >
             {gameOver ? 'START' : 'RESET'}
           </button>
           <div className='muteButton'>

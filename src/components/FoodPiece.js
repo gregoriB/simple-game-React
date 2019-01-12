@@ -4,9 +4,8 @@ import { data, food } from '../helpers/variables'
 const FoodPiece = (props) => {
 
   const handleClickFood = () => {
-    if (!data.isCheating) {
-      return;
-    }
+    if (!data.isCheating) return;
+    
     food.color.splice(index, 1);
     food.x.splice(index, 1);
     food.y.splice(index, 1);

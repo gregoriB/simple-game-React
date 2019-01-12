@@ -9,7 +9,7 @@ export const audio = {
   shoot: new Audio(laser)
 }
 
-export let data = {
+export const data = {
   countdown: undefined,
   cursor: 'default',
   isCheating: true,
@@ -19,7 +19,7 @@ export let data = {
   timeout: undefined
 }
 
-export const  player = {
+export const player = {
   canMove: {
     left: true,
     right: true,
@@ -38,18 +38,18 @@ export const  player = {
   }
 }
 
-export const  food = {
+export const food = {
   keys: [],
   x: [],
   y: [],
   color: [],
   foodItem: '',
   size: Math.ceil(player.size / 3),
-  generateFood: (num) => {
+  generateFood: num => {
     for (let i = 0; i < num; i++) {
-      const X = ~~(Math.random()*(map.width-(food.size*2)));
-      const Y = ~~(Math.random()*(map.height-(food.size*2)));
-      const color = `rgb(${~~(Math.random()*105)+150}, ${~~(Math.random()*80)}, ${~~(Math.random()*32)}`;
+      const X = ~~(Math.random() * (map.width - (food.size * 2)));
+      const Y = ~~(Math.random() * (map.height - (food.size * 2)));
+      const color = `rgb(${~~(Math.random() * 105) + 150}, ${~~(Math.random() * 80)}, ${~~(Math.random() * 32)}`;
       food.x.push(X);
       food.y.push(Y);
       food.color.push(color);
@@ -58,7 +58,4 @@ export const  food = {
   }
 }
 
-export const map = {
-  height: player.size * 40,
-  width: player.size * 80
-}
+export const map = { height: player.size * 40, width: player.size * 80 }

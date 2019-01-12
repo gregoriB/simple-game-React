@@ -17,25 +17,22 @@ export class GameProvider extends Component {
   }
 
   functions = {
-    
     //GAME STATE STUFF
     handleNewGame: () => {
       clearInterval(data.countdown);
       clearTimeout(data.timeout);
-      this.setState(() => ({ 
+      this.setState({
         gameOver: false,
-        playerPos: [(map.width/2)-(player.size)-1, (map.height/2)], 
+        playerPos: [(map.width / 2) - (player.size) - 1, (map.height / 2)], 
         score: 0, 
         stage: 1, 
         timer: 3
-      }));
+      });
       this.functions.handleInitializeVariables();
       this.functions.handleInitializeHighscore();
       this.functions.handleAddAudioLoop();
       this.functions.handlePregameCountdown();
-      data.timeout = setTimeout(() => {
-        this.functions.handleStartTimer();
-      }, 2998);
+      data.timeout = setTimeout(() => this.functions.handleStartTimer(), 2998);
     },
 
     handleInitializeVariables: () => {
@@ -54,12 +51,10 @@ export class GameProvider extends Component {
 
     //change this to affect the difficulty
     handleNextStage: () => {
-      this.setState((prevState) => ({ stage: prevState.stage + 1 }));
-      food.generateFood(this.state.stage*2);
+      this.setState(prevState => ({ stage: prevState.stage + 1 }));
+      food.generateFood(this.state.stage * 2);
       if (player.isReady) {
-        this.setState((prevState) => ({ 
-          timer: prevState.timer+Math.ceil(this.state.stage/(1+(this.state.stage*.02)))
-        }));
+        this.setState(prevState => ({ timer: prevState.timer + Math.ceil(this.state.stage / (1 + (this.state.stage * .02))) }));
       }
     },
     
@@ -70,7 +65,7 @@ export class GameProvider extends Component {
       audio.song.currentTime = 0;
       audio.explosion.play();
       player.isReady = false;
-      this.setState(() => ({ gameOver: true, timer: 'GAME OVER' }));
+      this.setState({ gameOver: true, timer: 'GAME OVER' });
       this.functions.handleUpdateHighScore();
       this.functions.handleRemoveAudioLoop();
     },
@@ -79,89 +74,70 @@ export class GameProvider extends Component {
     handleInitializeHighscore: () => {
       if (localStorage.getItem('highScore')) {
         const highScore = JSON.parse(localStorage.getItem('highScore'));
-        this.setState(() => ({ highScore: highScore }));
+        this.setState({ highScore: highScore });
       }
     },
 
     handleUpdateHighScore: () => {
-      if (data.isCheating) {
+      if (data.isCheating) return;
 
-        return
-      }
-      if (this.state.score < this.state.highScore) {
+      if (this.state.score < this.state.highScore) return;
 
-        return;
-      }
-      this.setState(() => ({ highScore: this.state.score }));
+      this.setState({ highScore: this.state.score });
       const highScore = JSON.stringify(this.state.score);
       localStorage.setItem('highScore', highScore);
     },
 
-    handleUpdateScore: () => {
-      this.setState((prevState) => ({ score: prevState.score + 1250 }));
-    },
+    handleUpdateScore: () => this.setState(prevState => ({ score: prevState.score + 1250 })),
 
     //AUDIO STUFF
-    handleAddAudioLoop: () => {
-      audio.song.addEventListener('ended', () => {
-        audio.song.currentTime = 0;
-        audio.song.play();
-      }, false);
+
+    handleInitializeAudioLoop: () => {
+      audio.song.currentTime = 0;
+      audio.song.play();
     },
 
-    handleRemoveAudioLoop: () => {
-      audio.song.removeEventListener('ended', () => {
-        audio.song.currentTime = 0;
-        audio.song.play();
-      }, false);
-    },
+    handleAddAudioLoop: () => audio.song.addEventListener('ended', this.handleInitializeAudioLoop, false),
+
+    handleRemoveAudioLoop: () => audio.song.removeEventListener('ended', this.handleInitializeAudioLoop, false),
 
     //TIMER STUFF
     handleStartTimer: () => {
       player.isReady = true;
       clearInterval(data.countdown);
-      this.setState(() => ({ timer: 20 }));
-      data.countdown = setInterval(() => { this.setState((prevState) => ({ timer: prevState.timer-1 })) }, 1000);
+      this.setState({ timer: 20 });
+      data.countdown = setInterval(() => this.setState(prevState => ({ timer: prevState.timer-1 })), 1000);
     },
     
-    handlePregameCountdown: () => {
-      data.countdown = setInterval(() => { this.setState((prevState) => ({ timer: prevState.timer-1 })) }, 1000);
-    },
+    handlePregameCountdown: () => data.countdown = setInterval(() => this.setState(prevState => ({ timer: prevState.timer-1 })), 1000),
 
     //called from the function in Player.js to set the movement state
-    handlePlayerMove: (newPlayerPos) => {
-      this.setState(() => ({ playerPos: newPlayerPos }));
-    },
+    handlePlayerMove: newPlayerPos => this.setState({ playerPos: newPlayerPos }),
 
     //press 'm' to enter cheat mode.  Handled in Player.js.
     handleActivateCheats: () => {
       data.cursor = 'crosshair';
       data.isCheating = true;
       audio.explosion.play();
-      this.setState(() => ({ highScore: 'CHEATS' }));
+      this.setState({ highScore: 'CHEATS' });
     },
 
     handleShootLaser: (e) => {
-      if (!data.isCheating || !this.state.timer || data.friendlyFire) {
-  
-        return;
-      }
+      if (!data.isCheating || !this.state.timer || data.friendlyFire) return;
+
       const outerDiv = document.getElementsByClassName('map')[0].getBoundingClientRect();
       const newLaserPos = [e.clientX - (outerDiv.left + 4), e.clientY - (outerDiv.top + 4)];
       audio.shoot.currentTime = 0;
       audio.shoot.play();
-      this.setState(() => ({ laserPos: newLaserPos, laserDisplay: 'inline-block' }));
-      setTimeout(() => {this.setState(() => ({ laserDisplay: 'none' }))}, 80);
+      this.setState({ laserPos: newLaserPos, laserDisplay: 'inline-block' });
+      setTimeout(() => this.setState({ laserDisplay: 'none' }), 80);
     }
   }
 
   render() {
     return (
       <GameContext.Provider 
-        value={{
-          ...this.state,
-          ...this.functions
-        }}
+        value={{ ...this.state, ...this.functions }}
       >
         {this.props.children}
       </GameContext.Provider>

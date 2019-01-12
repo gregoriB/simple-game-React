@@ -4,18 +4,13 @@ import { player } from '../helpers/variables';
 class Timer extends Component {
 
   shouldComponentUpdate(nextProps) {
-    if (nextProps.timer === this.props.timer) {
-
-      return false;
-    } 
+    if (nextProps.timer === this.props.timer) return false;
     
     return true;
   }
 
-  componentDidUpdate() {
-    if (this.props.timer === 0) {
-      this.props.handleGameOver();
-    }
+  componentDidUpdate() { 
+    if (this.props.timer === 0) return this.props.handleGameOver();
   }
 
   render() {
@@ -34,10 +29,8 @@ class Timer extends Component {
           {timer}
         </p>
         <p 
-        className='foregroundTimer'
-          style={{
-            opacity: player.isReady ? '.5': '0',
-          }}
+          className='foregroundTimer'
+          style={{ opacity: player.isReady ? '.5': '0' }}
         >
           {timer}
         </p>
